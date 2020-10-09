@@ -1,5 +1,6 @@
 from tkinter import *
 from gui_label import Make_label
+from gui_scroll import Make_scrollbar
 
 class Make_menubutton():
     # ------------------------------------------------   creating the menu-buttons ------------------------------------------------ #
@@ -14,7 +15,7 @@ class Make_menubutton():
         self.con_but = con_but
         self.sea_but = sea_but
         self.home_but = home_but
-        self.button = Button(self.menu_master, text = "images", bg="#0e1733", fg="white", 
+        self.button = Button(self.menu_master, text = "images", bg="#0e1733", fg="white", cursor="hand2",
         activeforeground="#bfbfbf", activebackground="#0e1733", borderwidth=0, padx=22, pady=39, command=lambda:self.images_page(), font=("Courier", 16))
         self.button.place(x=0,y=0)
 
@@ -22,7 +23,7 @@ class Make_menubutton():
         self.img_but = img_but
         self.sea_but = sea_but
         self.home_but = home_but
-        self.button = Button(self.menu_master, text = "containers", bg="#0e1733", fg="white", 
+        self.button = Button(self.menu_master, text = "containers", bg="#0e1733", fg="white", cursor="hand2",
         activeforeground="#bfbfbf", activebackground="#0e1733", borderwidth=0, padx=6, pady=40, command=lambda:self.containers_page(), font=("Courier", 14))
         self.button.place(x=125,y=0)
 
@@ -30,7 +31,7 @@ class Make_menubutton():
         self.img_but = img_but
         self.con_but = con_but
         self.home_but = home_but
-        self.button = Button(self.menu_master, text = "sea", bg="#0e1733", fg="white", 
+        self.button = Button(self.menu_master, text = "sea", bg="#0e1733", fg="white", cursor="hand2",
         activeforeground="#bfbfbf", activebackground="#0e1733", borderwidth=0, padx=34, pady=34, command=lambda:self.sea_page(), font=("Courier", 23))
         self.button.place(x=250,y=0)
 
@@ -38,7 +39,7 @@ class Make_menubutton():
         self.img_but = img_but
         self.con_but = con_but
         self.sea_but = sea_but
-        self.button = Button(self.menu_master, image=self.image, borderwidth=0, command=lambda:self.home_page())
+        self.button = Button(self.menu_master, image=self.image, borderwidth=0, cursor="hand2", command=lambda:self.home_page())
         self.button.place(x=375,y=0)
 
     # ------------------------------------------------   functions for buttons ------------------------------------------------ #
@@ -67,8 +68,10 @@ class Make_menubutton():
     @staticmethod
     def add_main_frame(master):
         global main_frame
+        Label(master, height=10, bg="#0d1a3f", borderwidth=0).grid(row=0,column=0)
+        #this is an invisble label to pulldown the main frame
         main_frame = Frame(master, width=500, height=550, bg="#0d1a3f")
-        main_frame.pack()
+        main_frame.grid(row=3,column=0)
     
     @staticmethod
     def remove_main_frame(frame):
@@ -87,8 +90,7 @@ class Make_menubutton():
         except:
             pass
         self.add_main_frame(self.master)
-        l1 = Make_label(main_frame, "images", 16, "#ffffff", "#203165")
-        l1.place(200,200)
+        Scrollbar = Make_scrollbar(main_frame, 485, 375, "#0e1733", "#0e1733")
 
     # --------------- containers_page --------------- #
     def containers_page(self):

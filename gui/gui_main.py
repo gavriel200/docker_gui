@@ -11,7 +11,7 @@ class MainApplication():
         # self.app.iconbitmap("/shark.xbm")
 
         # --------------------------- creating frames --------------------------- #
-        self.frame_menu = Frame(self.app, width=500, height=100, bg="#0e1733")
+        self.frame_menu = Frame(self.app, width=500, height=100, bg="#0d1a3f")
         self.frame_menu.place(x=0,y=0)
 
         self.frame_start = Frame(self.app, width=500, height=450, bg="#0e1733")

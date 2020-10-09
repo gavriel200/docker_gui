@@ -13,3 +13,8 @@ class Make_label():
         self.x = x
         self.y = y
         self.label.place(x = self.x, y = self.y)
+
+    def grid(self, col, row):
+        self.col = col
+        self.row = row
+        self.label.grid(column=self.col, row=self.row)
