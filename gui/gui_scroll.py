@@ -2,9 +2,8 @@
 from tkinter import *
 
 class Make_scrollbar():
-
+    # ------------------------------------------------   creating the Scrollbar ------------------------------------------------ #
     def __init__(self, master, width, height, canvas_color, frame_color):
-
         self.master = master
         self.width = width
         self.height = height
@@ -22,15 +21,20 @@ class Make_scrollbar():
 
         self.frame.bind("<Configure>", self.onFrameConfigure)
 
-        self.populate()
+    # Reset the scroll region to encompass the inner frame
+    def onFrameConfigure(self, event):
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))    
 
-    def populate(self):
+    # -----------------------------------------   adding diffrenrt widgets for each page ---------------------------------------- #
+
+    # ---------------- images page ----------------- #
+    def image_page_scrollbar(self):
         '''Put in some fake data'''
         for row in range(100):
             t="this is the second column for row %s" %row
             Label(self.frame, text=t, bg="#102052", font=("Courier",10), fg="white").grid(row=row, column=0)
 
     
-    def onFrameConfigure(self, event):
-        '''Reset the scroll region to encompass the inner frame'''
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+    # --------------- containers page --------------- #
+
+    # --------------- sea page --------------- #

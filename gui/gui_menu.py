@@ -90,7 +90,8 @@ class Make_menubutton():
         except:
             pass
         self.add_main_frame(self.master)
-        Scrollbar = Make_scrollbar(main_frame, 485, 375, "#0e1733", "#0e1733")
+        self.scrollbar = Make_scrollbar(main_frame, 485, 375, "#0e1733", "#0e1733")
+        self.scrollbar.image_page_scrollbar()
 
     # --------------- containers_page --------------- #
     def containers_page(self):

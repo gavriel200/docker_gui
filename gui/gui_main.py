@@ -2,6 +2,7 @@ from tkinter import *
 from gui_menu import Make_menubutton
 
 class MainApplication():
+    # ------------------------------------------------   creating the main-app ------------------------------------------------ #
     def __init__(self):
         self.app = Tk()
         self.app.geometry('500x550')
@@ -10,7 +11,7 @@ class MainApplication():
         self.app.configure(bg = '#10556b')
         # self.app.iconbitmap("/shark.xbm")
 
-        # --------------------------- creating frames --------------------------- #
+        # --------------------------- creating frames ---------------------------- #
         self.frame_menu = Frame(self.app, width=500, height=100, bg="#0d1a3f")
         self.frame_menu.place(x=0,y=0)
 
@@ -23,13 +24,13 @@ class MainApplication():
         self.menu_sea = Make_menubutton(self.frame_menu, self.app, self.frame_start)
         self.menu_home = Make_menubutton(self.frame_menu, self.app, self.frame_start)
 
-        # -------------- creating specific buttons and placing them --------------- #
+        # -------------- creating specific buttons and placing them -------------- #
         self.menu_images.menu_button_images(self.menu_containers, self.menu_sea, self.menu_home)
         self.menu_containers.menu_button_containers(self.menu_images, self.menu_sea, self.menu_home)
         self.menu_sea.menu_button_sea(self.menu_images, self.menu_containers, self.menu_home)
         self.menu_home.menu_button_home(self.menu_images, self.menu_containers, self.menu_sea)
 
-
+        # ----------------- running the mainloop of the main-app ----------------- #
         self.app.mainloop()
 
 if __name__ == "__main__":
