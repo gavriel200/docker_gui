@@ -1,5 +1,8 @@
 from tkinter import *
+from tkinter.filedialog import askopenfilename
+
 from gui_popup import Make_popup
+
 
 class Make_button():
     # ------------------------------------------------   creating button ------------------------------------------------ #
@@ -16,12 +19,16 @@ class Make_button():
         fg = self.font_color, font=("Courier", self.font_size), cursor="hand2", borderwidth=0)
 
     def images_upload(self):
-        self.button.config(command=self.image_upload_popup)
+        self.button.config(command=self.image_upload_browse)
 
     # ------------------------------------------------   button functions ------------------------------------------------ #
     
-    def image_upload_popup(self):
-        self.upload_popup = Make_popup("upload", "300x150")
+    def image_upload_browse(self):
+        filename = askopenfilename(initialdir = "~", title = "Select a .tar File", filetypes = (("docker image tar files", "*.tar*"), ("all files", "*.*")))
+        if len(filename)==0:
+            pass
+        else:
+            print(filename)
 
     # ------------------------------------------------   button possioning ----------------------------------------------- #
 
