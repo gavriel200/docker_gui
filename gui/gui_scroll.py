@@ -33,7 +33,6 @@ class Make_scrollbar():
         for row in range(100):
             t="this is the second column for row %s" %row
             Label(self.frame, text=t, bg="#102052", font=("Courier",10), fg="white").grid(row=row, column=0)
-
     
     # --------------- containers page --------------- #
 

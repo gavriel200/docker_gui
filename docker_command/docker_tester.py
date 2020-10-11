@@ -1,10 +1,10 @@
-from dockercom import Images
-from dockercom import Container
+from docker_com import Docker_images
+from docker_com import Docker_container
 
 # (a b c d e f g h i j k l m n o p)
 
-# a = Images.just_images()
-# print(a)
+a = Docker_images().just_images()
+print(a)
 
 # b = Images.list_images()
 # print(b)

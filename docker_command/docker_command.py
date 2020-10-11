@@ -2,8 +2,8 @@ import subprocess
 import re
 import os
 
-class Images:
-
+class Docker_images:
+    # ------------------------------------------------   functions for docker images ------------------------------------------------ #
     @staticmethod    
     def just_images():
         """ prints the command docker images as it comes"""
@@ -92,8 +92,8 @@ class Images:
         else:
             return sub.stdout
     
-class Container:
-
+class Docker_container:
+    # ------------------------------------------------   functions for docker containers ------------------------------------------------ #
     @staticmethod
     def just_containers():
         """ prints the command "docker container ls --all" as it comes"""
