@@ -1,4 +1,3 @@
-
 from tkinter import *
 
 class Make_scrollbar():

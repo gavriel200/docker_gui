@@ -1,10 +1,5 @@
-import sys
-
-sys.path.append('./docker_command/')
 from tkinter import *
-
 from docker_command import Docker_images
-
 from gui_button import Make_button
 from gui_label import Make_label
 from gui_scroll import Make_scrollbar
@@ -16,7 +11,7 @@ class Make_menubutton():
         self.old_frame = old_frame
         self.master = master
         self.menu_master = menu_master
-        self.image = PhotoImage(file="gui/shark2.png")
+        self.image = PhotoImage(file="./shark2.png")
     
     def menu_button_images(self, con_but, sea_but, home_but):
         self.con_but = con_but
