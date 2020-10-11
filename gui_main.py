@@ -8,7 +8,7 @@ class MainApplication():
         self.app.geometry('500x550')
         self.app.resizable(False, False)
         self.app.title("Shark")
-        self.app.configure(bg = '#10556b')
+        self.app.configure(bg = '#0e1733')
         # self.app.iconbitmap("/shark.xbm")
 
         # --------------------------- creating frames ---------------------------- #

@@ -1,4 +1,5 @@
 from tkinter import *
+from gui_popup import Make_popup
 
 class Make_button():
     # ------------------------------------------------   creating button ------------------------------------------------ #
@@ -13,6 +14,16 @@ class Make_button():
         
         self.button = Button(self.master, text = self.text, width = self.width, height = self.height, bg = self.color, 
         fg = self.font_color, font=("Courier", self.font_size), cursor="hand2", borderwidth=0)
+
+    def images_upload(self):
+        self.button.config(command=self.image_upload_popup)
+
+    # ------------------------------------------------   button functions ------------------------------------------------ #
+    
+    def image_upload_popup(self):
+        self.upload_popup = Make_popup("upload", "300x150")
+
+    # ------------------------------------------------   button possioning ----------------------------------------------- #
 
     # ------------------------ placing the button widget ------------------------ #
     def place(self, x, y):

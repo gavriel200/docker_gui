@@ -68,10 +68,15 @@ class Make_menubutton():
     @staticmethod
     def add_main_frame(master):
         global main_frame
-        Label(master, height=10, bg="#0d1a3f", borderwidth=0).grid(row=0,column=0)
-        #this is an invisble label to pulldown the main frame
+        global scrollbar_frame
         main_frame = Frame(master, width=500, height=550, bg="#0d1a3f")
-        main_frame.grid(row=3,column=0)
+        main_frame.pack()
+
+        #this is an invisble label to pulldown the main frame
+        Label(main_frame, height=10, bg="#0d1a3f", borderwidth=0).grid(row=0,column=0)
+
+        scrollbar_frame = Frame(main_frame, width=500, height=550, bg="#0d1a3f")
+        scrollbar_frame.grid(row=3,column=0)
     
     @staticmethod
     def remove_main_frame(frame):
@@ -90,8 +95,11 @@ class Make_menubutton():
         except:
             pass
         self.add_main_frame(self.master)
-        self.scrollbar = Make_scrollbar(main_frame, 485, 375, "#0e1733", "#0e1733")
+        self.scrollbar = Make_scrollbar(scrollbar_frame, 485, 375, "#0e1733", "#0e1733")
         self.scrollbar.image_page_scrollbar()
+        self.button_upload = Make_button(main_frame, "upload", 0, 0, "#344658", 18, "white")
+        self.button_upload.images_upload()
+        self.button_upload.place(380, 120)
 
     # --------------- containers_page --------------- #
     def containers_page(self):
@@ -122,7 +130,7 @@ class Make_menubutton():
         except:
             pass
         self.add_main_frame(self.master)
-        l1 = Make_label(main_frame, "sea", 16, "#ffffff", "#203165")
+        l1 = Make_label(scrollbar_frame, "sea", 16, "#ffffff", "#203165")
         l1.place(200,200)
 
     # ------------------ home_page ------------------- #
@@ -136,5 +144,5 @@ class Make_menubutton():
         except:
             pass
         self.add_main_frame(self.master)
-        l1 = Make_label(main_frame, "home", 16, "#ffffff", "#203165")
+        l1 = Make_label(scrollbar_frame, "home", 16, "#ffffff", "#203165")
         l1.place(200,200)
