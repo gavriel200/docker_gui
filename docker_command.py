@@ -10,9 +10,9 @@ class Docker_images:
 
         sub = subprocess.run(["docker","images"], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:
-            return sub.stdout
+            return sub.returncode, sub.stdout
     
     @staticmethod
     def list_images():
@@ -20,7 +20,7 @@ class Docker_images:
 
         sub = subprocess.run(["docker","images"], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:
             list_of_images = []
             for items in sub.stdout.split("\n"):
@@ -35,9 +35,9 @@ class Docker_images:
 
         sub = subprocess.run(["docker","load", "-i", dir_to_image], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:
-            return sub.stdout
+            return sub.returncode, sub.stdout
     
     @staticmethod
     def rm_image(image_rep_tag):
@@ -45,9 +45,9 @@ class Docker_images:
 
         sub = subprocess.run(["docker","image", "rm", "-f", image_rep_tag], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:
-            return sub.stdout
+            return sub.returncode, sub.stdout
 
     @staticmethod
     def run_image(image_rep_tag, port, vol, bash):
@@ -69,7 +69,10 @@ class Docker_images:
         else:
             print(command)
             sub = subprocess.run(command, capture_output=True, text=True)
-            return sub.stderr
+            if sub.returncode == 1:
+                return sub.returncode, sub.stderr
+            else:
+                return sub.returncode, sub.stdout
 
     @staticmethod
     def save_image(image_rep_tag, dir_and_tar_name):
@@ -77,9 +80,9 @@ class Docker_images:
 
         sub = subprocess.run(["docker","save", "-o", dir_and_tar_name, image_rep_tag], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:
-            return sub.stdout
+            return sub.returncode, sub.stdout
     
     @staticmethod
     def change_image_tag(image_rep_tag, new_image_rep_tag):
@@ -88,9 +91,9 @@ class Docker_images:
         sub = subprocess.run(["docker","image", "tag", image_rep_tag, new_image_rep_tag], capture_output=True, text=True)
         sub = subprocess.run(["docker","image", "rm", "-f", image_rep_tag], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:
-            return sub.stdout
+            return sub.returncode, sub.stdout
     
 class Docker_container:
     # ------------------------------------------------   functions for docker containers ------------------------------------------------ #
@@ -100,9 +103,9 @@ class Docker_container:
 
         sub = subprocess.run(["docker","container", "ls", "--all"], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:
-            return sub.stdout
+            return sub.returncode, sub.stdout
     
     @staticmethod
     def list_containers():
@@ -110,7 +113,7 @@ class Docker_container:
 
         sub = subprocess.run(["docker","container", "ls", "--all"], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:
             list_of_containers = []
             for items in sub.stdout.split("\n"):
@@ -125,7 +128,7 @@ class Docker_container:
 
         sub = subprocess.run(["docker", "ps"], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:  
             list_of_running_containers = []
             list_of_ids = []
@@ -144,9 +147,9 @@ class Docker_container:
 
         sub = subprocess.run(["docker", "commit", container_id, new_image_rep_tag], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:
-            return sub.stdout
+            return sub.returncode, sub.stdout
 
     @staticmethod
     def start_or_stop_containers(container_id):
@@ -157,7 +160,7 @@ class Docker_container:
         
         sub = subprocess.run(["docker", "ps"], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:  
             list_of_running_containers = []
             list_of_ids = []
@@ -171,16 +174,16 @@ class Docker_container:
             if container_id in list_of_ids:
                 sub = subprocess.run(["docker", "stop", container_id], capture_output=True, text=True)
                 if sub.returncode == 1:
-                    return sub.stderr
+                    return sub.returncode, sub.stderr
                 else:
-                    return sub.stdout
+                    return sub.returncode, sub.stdout
 
             else:
                 sub = subprocess.run(["docker", "start", container_id], capture_output=True, text=True)
                 if sub.returncode == 1:
-                    return sub.stderr
+                    return sub.returncode, sub.stderr
                 else:
-                    return sub.stdout
+                    return sub.returncode, sub.stdout
     
     @staticmethod
     def start_container_in_bash(container_id):
@@ -188,7 +191,7 @@ class Docker_container:
 
         sub = subprocess.run(["docker", "ps"], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:  
             list_of_running_containers = []
             list_of_ids = []
@@ -213,6 +216,6 @@ class Docker_container:
         """ removes a container by the container id this will also remove a running container"""
         sub = subprocess.run(["docker", "rm", "-f", container_id], capture_output=True, text=True)
         if sub.returncode == 1:
-            return sub.stderr
+            return sub.returncode, sub.stderr
         else:  
-            return sub.stdout
+            return sub.returncode, sub.stdout

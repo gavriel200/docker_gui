@@ -21,3 +21,7 @@ class Make_label():
         self.col = col
         self.row = row
         self.label.grid(column=self.col, row=self.row)
+
+    # ----------------------------- just pack it ------------------------------- #
+    def pack(self):
+        self.label.pack()

@@ -18,19 +18,16 @@ class MainApplication():
         self.frame_start = Frame(self.app, width=500, height=450, bg="#0e1733")
         self.frame_start.place(x=0,y=100)
 
-        # ------------------------ creating button object ------------------------ #
+        # ------------------------ creating menu buttons ------------------------ #
         self.menu_images = Make_menubutton(self.frame_menu, self.app, self.frame_start)
+        self.menu_images.menu_button_images()
         self.menu_containers = Make_menubutton(self.frame_menu, self.app, self.frame_start)
+        self.menu_containers.menu_button_containers()
         self.menu_sea = Make_menubutton(self.frame_menu, self.app, self.frame_start)
+        self.menu_sea.menu_button_sea()
         self.menu_home = Make_menubutton(self.frame_menu, self.app, self.frame_start)
+        self.menu_home.menu_button_home()
 
-        # -------------- creating specific buttons and placing them -------------- #
-        self.menu_images.menu_button_images(self.menu_containers, self.menu_sea, self.menu_home)
-        self.menu_containers.menu_button_containers(self.menu_images, self.menu_sea, self.menu_home)
-        self.menu_sea.menu_button_sea(self.menu_images, self.menu_containers, self.menu_home)
-        self.menu_home.menu_button_home(self.menu_images, self.menu_containers, self.menu_sea)
-
-        # ----------------- running the mainloop of the main-app ----------------- #
         self.app.mainloop()
 
 if __name__ == "__main__":

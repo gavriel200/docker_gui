@@ -1,4 +1,5 @@
 from tkinter import *
+
 from docker_command import Docker_images
 from gui_button import Make_button
 from gui_label import Make_label
@@ -13,53 +14,26 @@ class Make_menubutton():
         self.menu_master = menu_master
         self.image = PhotoImage(file="./shark2.png")
     
-    def menu_button_images(self, con_but, sea_but, home_but):
-        self.con_but = con_but
-        self.sea_but = sea_but
-        self.home_but = home_but
+    def menu_button_images(self):
         self.button = Button(self.menu_master, text = "images", bg="#0e1733", fg="white", cursor="hand2",
         activeforeground="#bfbfbf", activebackground="#0e1733", borderwidth=0, padx=22, pady=39, command=lambda:self.images_page(), font=("Courier", 16))
         self.button.place(x=0,y=0)
 
-    def menu_button_containers(self, img_but, sea_but, home_but):
-        self.img_but = img_but
-        self.sea_but = sea_but
-        self.home_but = home_but
+    def menu_button_containers(self):
         self.button = Button(self.menu_master, text = "containers", bg="#0e1733", fg="white", cursor="hand2",
         activeforeground="#bfbfbf", activebackground="#0e1733", borderwidth=0, padx=6, pady=40, command=lambda:self.containers_page(), font=("Courier", 14))
         self.button.place(x=125,y=0)
 
-    def menu_button_sea(self, img_but, con_but, home_but):
-        self.img_but = img_but
-        self.con_but = con_but
-        self.home_but = home_but
+    def menu_button_sea(self):
         self.button = Button(self.menu_master, text = "sea", bg="#0e1733", fg="white", cursor="hand2",
         activeforeground="#bfbfbf", activebackground="#0e1733", borderwidth=0, padx=34, pady=34, command=lambda:self.sea_page(), font=("Courier", 23))
         self.button.place(x=250,y=0)
 
-    def menu_button_home(self, img_but, con_but, sea_but):
-        self.img_but = img_but
-        self.con_but = con_but
-        self.sea_but = sea_but
+    def menu_button_home(self):
         self.button = Button(self.menu_master, image=self.image, borderwidth=0, cursor="hand2", command=lambda:self.home_page())
         self.button.place(x=375,y=0)
 
     # ------------------------------------------------   functions for buttons ------------------------------------------------ #
-
-    # -------- button press related functions -------- #
-    def onpage(self, but):
-        #function to change the color on the page that we are on more lighter color
-        #just need to put in the button obj you want to change color
-        self.but = but
-        self.but["bg"] = "#102052"
-        self.but["activebackground"] = "#102052"
-
-    def notonpage(self, but):
-        #function to change the color back to the normal color
-        #just need to put in the button obj you want to change color
-        self.but = but
-        self.but["bg"] = "#0e1733"
-        self.but["activebackground"] = "#0e1733"
 
     # -------- frame related functions -------- #
     def remove_old_frame(self):
@@ -97,8 +71,9 @@ class Make_menubutton():
         self.add_main_frame(self.master)
         self.scrollbar = Make_scrollbar(scrollbar_frame, 485, 375, "#0e1733", "#0e1733")
         self.scrollbar.image_page_scrollbar()
+        # needs a loading effect while the image is uploaded
         self.button_upload = Make_button(main_frame, "upload", 0, 0, "#344658", 18, "white")
-        self.button_upload.images_upload()
+        self.button_upload.images_upload(self.images_page)
         self.button_upload.place(380, 120)
 
     # --------------- containers_page --------------- #
@@ -114,10 +89,6 @@ class Make_menubutton():
         self.add_main_frame(self.master)
         l1 = Make_label(main_frame, "containers", 16, "#ffffff", "#203165")
         l1.place(200,200)
-        b1 = Make_button(main_frame, "gag", 0, 0, "red", 16, "white")
-        b1.place(300, 200)
-        a = Docker_images().just_images()
-        print(a)
 
     # ------------------- sea_page ------------------ #
     def sea_page(self):
