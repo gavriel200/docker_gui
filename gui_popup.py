@@ -128,6 +128,12 @@ class Make_popup():
                     error_popup = Make_popup("ERROR")
                     error_popup.error("ERROR! make sure that you write both the\nhost and the container port\nand that you dont have two of the same ports")
                     self.popup.grab_set()
+                elif " " in host_entry or " " in cont_entry:
+                    self.port_host.delete(0, END)
+                    self.port_cont.delete(0, END)
+                    error_popup = Make_popup("ERROR")
+                    error_popup.error("ERROR! cant have spaces in ports")
+                    self.popup.grab_set()
                 else:
                     self.port.append(new_port)
                     self.port_host.delete(0, END)
@@ -217,21 +223,47 @@ class Make_popup():
                 error_popup = Make_popup("ERROR")
                 error_popup.error("ERROR! make sure you write a reposotry name")
                 self.popup.grab_set()
+            if len(new_rep) > 13:
+                error_popup = Make_popup("ERROR")
+                error_popup.error("ERROR! you should not make names so long")
+                self.popup.grab_set()
+            elif " " in new_rep:
+                error_popup = Make_popup("ERROR")
+                error_popup.error("ERROR! should not have spaces in rep name")
+                self.popup.grab_set()
             else:
-                if len(new_tag) == 0:
+                if " " in new_tag:
+                    error_popup = Make_popup("ERROR")
+                    error_popup.error("ERROR! should not have spaces in tag name")
+                    self.popup.grab_set()
+                elif len(new_tag) >13:
+                    error_popup = Make_popup("ERROR")
+                    error_popup.error("ERROR! you should not make tags so long")
+                    self.popup.grab_set()
+                elif len(new_tag) == 0:
                     new_rep_tag = new_rep
+                    print(new_rep_tag)
+                    edit = Docker_images().change_image_tag(self.rep_tag, new_rep_tag)
+                    print(edit)
+                    if edit[0] == 1:
+                        self.error_popup = Make_popup("ERROR")
+                        self.error_popup.error(edit[1])
+                        self.popup.grab_set()
+                    else:
+                        self.reload_page()
+                        self.popup.destroy()
                 else:
                     new_rep_tag = new_rep+":"+new_tag
-                print(new_rep_tag)
-                edit = Docker_images().change_image_tag(self.rep_tag, new_rep_tag)
-                print(edit)
-                if edit[0] == 1:
-                    self.error_popup = Make_popup("ERROR")
-                    self.error_popup.error(edit[1])
-                    self.popup.grab_set()
-                else:
-                    self.reload_page()
-                    self.popup.destroy()
+                    print(new_rep_tag)
+                    edit = Docker_images().change_image_tag(self.rep_tag, new_rep_tag)
+                    print(edit)
+                    if edit[0] == 1:
+                        self.error_popup = Make_popup("ERROR")
+                        self.error_popup.error(edit[1])
+                        self.popup.grab_set()
+                    else:
+                        self.reload_page()
+                        self.popup.destroy()
 
     def save_image_popup(self, rep_tag, reload_page):
         self.rep_tag = rep_tag
