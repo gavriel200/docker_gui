@@ -51,7 +51,8 @@ class Docker_images:
 
     @staticmethod
     def run_image(image_rep_tag, port, vol, bash):
-        """ runing an image with the ability to add ports and volumes, if running in bash == True the a terminal will be opened"""
+        """ runing an image with the ability to add ports and volumes, if running in bash == True the a terminal will be opened
+        takes in the ports and volumes as a list of string e.g. ["-p 80:80","-p 60:130"]"""
 
         command = ["docker", "run", image_rep_tag]
         for vols in vol:
@@ -65,10 +66,19 @@ class Docker_images:
             for items in command:
                 cmd_command = cmd_command + items + " "
             print(cmd_command)
-            os.system("start cmd /c " + cmd_command)
+            # os.system("start cmd /c " + cmd_command) # for 
+            os.system(f"gnome-terminal -e 'bash -c \"{cmd_command}; sleep 1000000\" '")
+            return 0, 0
+
         else:
             print(command)
-            sub = subprocess.run(command, capture_output=True, text=True)
+            subprocess_command = []
+            for items in command:
+                splited = items.split()
+                for item in splited:
+                    subprocess_command.append(item)
+
+            sub = subprocess.run(subprocess_command, capture_output=True, text=True)
             if sub.returncode == 1:
                 return sub.returncode, sub.stderr
             else:
@@ -219,3 +229,6 @@ class Docker_container:
             return sub.returncode, sub.stderr
         else:  
             return sub.returncode, sub.stdout
+
+# a = Docker_images()
+# a.run_image("ubuntu", ["-p 80:130"], "", False)

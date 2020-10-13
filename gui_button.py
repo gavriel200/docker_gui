@@ -48,8 +48,69 @@ class Make_button():
 
     def error_popup(self, text):
         self.text = text
-        self.app = Make_popup("Error")
+        self.app = Make_popup("ERROR")
         self.app.error(self.text)
+
+    # ------------------------------------------------   button possioning ----------------------------------------------- #
+
+    # ------------------------ placing the button widget ------------------------ #
+    def place(self, x, y):
+        self.x = x
+        self.y = y
+        self.button.place(x = self.x, y = self.y)
+
+    # ------------------- putting the button widget on a grid ------------------- #
+    def grid(self, col ,row):
+        self.col = col
+        self.row = row
+        self.button.grid(column = self.col, row = self.row) 
+
+class Make_image_button():
+    # --------------------------------------------- creating button with images -------------------------------------------- #
+    def __init__(self, master, dir_to_image):
+        self.master = master
+        self.dir_to_image = dir_to_image
+        self.image = PhotoImage(file=self.dir_to_image)
+        self.button = Button(self.master, image = self.image, cursor="hand2", borderwidth=0)
+
+    # ------------------------------- creating specific buttons ------------------------------ #
+
+    # ---------------- images_page ----------------- #
+    def run_image(self, rep_tag, reload_image_page):
+        self.reload_image_page =reload_image_page
+        self.rep_tag = rep_tag
+        self.button.configure(command=self.run_image_function)
+
+    def run_image_function(self):
+        self.app = Make_popup("RUN IMAGE")
+        self.app.run_image_popup(self.rep_tag, self.reload_image_page)
+
+    def edit_image(self, rep_tag, reload_image_page):
+        self.reload_image_page =reload_image_page
+        self.rep_tag = rep_tag
+        self.button.configure(command=self.edit_image_function)
+
+    def edit_image_function(self):
+        self.app = Make_popup("EDIT IMAGE")
+        self.app.edit_image_popup(self.rep_tag, self.reload_image_page)
+
+    def save_image(self, rep_tag, reload_image_page):
+        self.reload_image_page =reload_image_page
+        self.rep_tag = rep_tag
+        self.button.configure(command=self.save_image_function)
+
+    def save_image_function(self):
+        self.app = Make_popup("SAVE IMAGE")
+        self.app.save_image_popup(self.rep_tag, self.reload_image_page)
+
+    def rm_image(self, rep_tag, reload_image_page):
+        self.reload_image_page =reload_image_page
+        self.rep_tag = rep_tag
+        self.button.configure(command=self.rm_image_function)
+
+    def rm_image_function(self):
+        self.app = Make_popup("REMOVE IMAGE")
+        self.app.rm_image_popup(self.rep_tag, self.reload_image_page)
 
     # ------------------------------------------------   button possioning ----------------------------------------------- #
 

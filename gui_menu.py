@@ -70,7 +70,7 @@ class Make_menubutton():
             pass
         self.add_main_frame(self.master)
         self.scrollbar = Make_scrollbar(scrollbar_frame, 485, 375, "#0e1733", "#0e1733")
-        self.scrollbar.image_page_scrollbar()
+        self.scrollbar.image_page_scrollbar(self.images_page)
         # needs a loading effect while the image is uploaded
         self.button_upload = Make_button(main_frame, "upload", 0, 0, "#344658", 18, "white")
         self.button_upload.images_upload(self.images_page)
