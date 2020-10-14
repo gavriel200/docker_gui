@@ -6,15 +6,18 @@ from gui_button import Make_image_button
 from gui_label import Make_label
 from gui_popup import Make_popup
 
+
 class Make_scrollbar():
-    # ------------------------------------------------   creating the Scrollbar ------------------------------------------------ #
+# ---------------- create __init__ a scrollbar ----------------------------------- #
     def __init__(self, master, width, height, canvas_color, frame_color):
+        # -------- create init ---------- # 
         self.master = master
         self.width = width
         self.height = height
         self.canvas_color = canvas_color
         self.frame_color = frame_color
-        
+
+        # -------- create the scrollbar - # 
         self.canvas = Canvas(self.master, borderwidth=0, background=self.canvas_color, width = self.width, height=self.height)
         self.frame = Frame(self.canvas, background=self.frame_color)
         self.vsb = Scrollbar(self.master, orient="vertical", cursor="hand2", command=self.canvas.yview)
@@ -30,12 +33,12 @@ class Make_scrollbar():
     def onFrameConfigure(self, event):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))    
 
-    # -----------------------------------------   adding diffrenrt widgets for each page ---------------------------------------- #
-
-    # ---------------- images page ----------------- #
+# ---------------- populate scrollbar -------------------------------------------- #
+    # ---------------- images ----------------------- #
     def image_page_scrollbar(self, reload_image_page):
+        # -------- reload page fun ------ #
         self.reload_image_page = reload_image_page
-
+        # -------- menu bar ~ ----------- #
         self.rep = Make_label(self.frame, "    rep   ", 10, "white", "#0e1733")
         self.rep.grid(0,0)
         self.tag = Make_label(self.frame, "|   tag  |", 10, "white", "#0e1733")
@@ -47,10 +50,12 @@ class Make_scrollbar():
         self.size = Make_label(self.frame, "| size ", 10, "white", "#0e1733")
         self.size.grid(4,0)
 
+        # -------- get list of images --- #
         images = Docker_images.list_images()
 
         row = 1
         for rows in images:
+            # -------- adding the images ---- #
             if len(rows[0]) > 10:
                 Label(self.frame, text=rows[0], bg="#0e1733", font=("Courier",7), fg="white").grid(row=row, column=0)
             else:
@@ -63,6 +68,7 @@ class Make_scrollbar():
             Label(self.frame, text=(str(rows[3])+" "+str(rows[4])+" "+str(rows[5])), bg="#0e1733", font=("Courier",7), fg="white").grid(row=row, column=3)
             Label(self.frame, text=rows[6], bg="#0e1733", font=("Courier",10), fg="white").grid(row=row, column=4)
 
+            # -------- adding the buttons --- #
             self.run = Make_image_button(self.frame, "./run_button.png")
             self.run.run_image(rows[0]+":"+rows[1], self.reload_image_page)
             self.run.grid(5, row)
@@ -77,6 +83,6 @@ class Make_scrollbar():
             self.rm.grid(8, row)
             row = row + 1
 
-    # --------------- containers page --------------- #
+    # ---------------- containers ------------------- #
 
-    # --------------- sea page --------------- #
+    # ---------------- sea -------------------------- #

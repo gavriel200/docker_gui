@@ -4,9 +4,11 @@ from tkinter import filedialog
 from docker_command import Docker_images
 from gui_label import Make_label
 
+# -------------------------------------------------------------------------------- #
+# ----------------
 
 class Make_popup():
-    #-------------------------------------------------------- crafting the main popup block -------------------------------------------------------------#
+# ---------------- create __init__ popup ----------------------------------------- #
     def __init__(self, popup_name):
         self.popup_name = popup_name
         self.popup = Toplevel()
@@ -15,16 +17,14 @@ class Make_popup():
         self.popup.title(self.popup_name)
         self.popup.configure(bg = '#0e1733')
 
-    #-------------------------------------------------------- adding diffrent popups -------------------------------------------------------------#
-
+# ---------------- error popups -------------------------------------------------- #
     def error(self, text):
         self.text = text
         error_massage = Make_label(self.popup, self.text, 18, "red", "#0e1733")
         error_massage.pack()
 
-# ---------------- images_page ----------------- #
+# ---------------- images page --------------------------------------------------- #
     def run_image_popup(self, rep_tag, reload_page):
-        #-------------------------------------------------------- running a docker image ---------------------------------------------------------------#
         self.rep_tag = rep_tag
         self.reload_page = reload_page
         self.port = []
@@ -197,6 +197,7 @@ class Make_popup():
                 error_popup = Make_popup("ERROR")
                 error_popup.error("ERROR! you should not make names so long")
                 self.popup.grab_set()
+            # add a check if name alredy exists
             else:
                 if len(self.name) == 0:
                     self.name.append(f"--name {name_entry}")
@@ -205,7 +206,6 @@ class Make_popup():
                     self.name.pop()
                     self.name.append(f"--name {name_entry}")
                     update_page()
-
 
         def run_button_function():
             if len(self.name)==0:
@@ -349,7 +349,7 @@ class Make_popup():
                     error_popup = Make_popup("ERROR")
                     error_popup.error("ERROR! your file should have a name...")
                     self.popup.grab_set()
-                elif "/" in self.file:
+                elif "/" in self.file: # verry importand in windows should add more symbols / \ : ? * " < > |
                     self.file_name.delete(0, END)
                     error_popup = Make_popup("ERROR")
                     error_popup.error("ERROR! you cant have / in your file name!!")
@@ -397,10 +397,10 @@ class Make_popup():
                 self.reload_page()
                 self.popup.destroy()
 
-# ---------------- container_page -------------- #
+# ---------------- container page ------------------------------------------------ #
 
-# ------------------------------------------------------- Class fot the run image popup ------------------------------------------------------------- #
 class Remove_vols_and_ports():
+# ---------------- create vols and ports objects --------------------------------- #
     # this class is used in the run image popup, because we cant import the button class and we want to save the button object and its content
     #so we created a class here that stores those contents
     def __init__(self, master, text, list_p_v, update_fun):

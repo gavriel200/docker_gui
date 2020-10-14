@@ -8,7 +8,7 @@ from gui_popup import Make_popup
 
 
 class Make_button():
-    # ------------------------------------------------   creating button ------------------------------------------------ #
+# ---------------- create __init__ button ---------------------------------------- #
     def __init__(self, master, text, width, height, color, font_size, font_color):
         self.master = master
         self.text = text
@@ -17,24 +17,19 @@ class Make_button():
         self.color = color
         self.font_size = font_size
         self.font_color = font_color
-        
-        # self.button = Button(self.master, text = self.text, width = self.width, height = self.height, bg = self.color, 
-        # fg = self.font_color, font=("Courier", self.font_size), cursor="hand2", borderwidth=0)
 
-    # -------------------------------------------   images page -------------------------------------------- #
-
-    # ------------------------ creating upload button ------------------------- #
+# ---------------- create image upload button ------------------------------------ #
     def images_upload(self, reload):
         # needs a loading effect while the image is uploaded
         self.reload = reload
         self.button = Button(self.master, text = self.text, width = self.width, height = self.height, bg = self.color, 
         fg = self.font_color, font=("Courier", self.font_size), cursor="hand2", borderwidth=0, command=lambda:self.image_upload_browse(self.reload))
-    
-    # ------------------------------------------------   button functions ------------------------------------------------ #
-    
+
+# ---------------- function for image upload button ------------------------------ #
     def image_upload_browse(self, reload):
         # needs a loading effect while the image is uploaded
         self.reload = reload
+        # -------- open file exp -------- #
         filename = askopenfilename(initialdir = "~", title = "Select a .tar File", filetypes = (("docker image tar files", "*.tar*"), ("all files", "*.*")))
         if len(filename)==0:
             pass
@@ -42,40 +37,32 @@ class Make_button():
             com = Docker_images.load_image(filename)
             print(com)
             if com[0]==1:
-                self.error_popup(com[1])
+                error_popup = Make_popup("ERROR")
+                error_popup.error(com[1]) 
             else:
                 self.reload()
 
-    def error_popup(self, text):
-        self.text = text
-        self.app = Make_popup("ERROR")
-        self.app.error(self.text)
-
-    # ------------------------------------------------   button possioning ----------------------------------------------- #
-
-    # ------------------------ placing the button widget ------------------------ #
+# ---------------- placing the button -------------------------------------------- #
     def place(self, x, y):
         self.x = x
         self.y = y
         self.button.place(x = self.x, y = self.y)
 
-    # ------------------- putting the button widget on a grid ------------------- #
     def grid(self, col ,row):
         self.col = col
         self.row = row
         self.button.grid(column = self.col, row = self.row) 
 
 class Make_image_button():
-    # --------------------------------------------- creating button with images -------------------------------------------- #
+# ---------------- create __init__ image button ---------------------------------- #
     def __init__(self, master, dir_to_image):
         self.master = master
         self.dir_to_image = dir_to_image
         self.image = PhotoImage(file=self.dir_to_image)
         self.button = Button(self.master, image = self.image, cursor="hand2", borderwidth=0)
 
-    # ------------------------------- creating specific buttons ------------------------------ #
-
-    # ---------------- images_page ----------------- #
+# ---------------- image page buttons -------------------------------------------- #
+    # ---------------- run ------------------------- #
     def run_image(self, rep_tag, reload_image_page):
         self.reload_image_page =reload_image_page
         self.rep_tag = rep_tag
@@ -85,24 +72,27 @@ class Make_image_button():
         self.app = Make_popup("RUN IMAGE")
         self.app.run_image_popup(self.rep_tag, self.reload_image_page)
 
+    # ---------------- edit ------------------ #
     def edit_image(self, rep_tag, reload_image_page):
         self.reload_image_page =reload_image_page
         self.rep_tag = rep_tag
         self.button.configure(command=self.edit_image_function)
 
     def edit_image_function(self):
-        self.app = Make_popup("EDIT IMAGE")
+        self.app = Make_popup("EDIT IMAGE NAME")
         self.app.edit_image_popup(self.rep_tag, self.reload_image_page)
 
+    # ---------------- save ------------------------ #
     def save_image(self, rep_tag, reload_image_page):
         self.reload_image_page =reload_image_page
         self.rep_tag = rep_tag
         self.button.configure(command=self.save_image_function)
 
     def save_image_function(self):
-        self.app = Make_popup("SAVE IMAGE")
+        self.app = Make_popup("SAVE IMAGE TO FILE")
         self.app.save_image_popup(self.rep_tag, self.reload_image_page)
 
+    # ---------------- remove ---------------------- #
     def rm_image(self, rep_tag, reload_image_page):
         self.reload_image_page =reload_image_page
         self.rep_tag = rep_tag
@@ -112,15 +102,12 @@ class Make_image_button():
         self.app = Make_popup("REMOVE IMAGE")
         self.app.rm_image_popup(self.rep_tag, self.reload_image_page)
 
-    # ------------------------------------------------   button possioning ----------------------------------------------- #
-
-    # ------------------------ placing the button widget ------------------------ #
+# ---------------- placing the image button -------------------------------------- #
     def place(self, x, y):
         self.x = x
         self.y = y
         self.button.place(x = self.x, y = self.y)
 
-    # ------------------- putting the button widget on a grid ------------------- #
     def grid(self, col ,row):
         self.col = col
         self.row = row

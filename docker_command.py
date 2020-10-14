@@ -1,9 +1,10 @@
-import subprocess
-import re
 import os
+import re
+import subprocess
+
 
 class Docker_images:
-    # ------------------------------------------------   functions for docker images ------------------------------------------------ #
+# ---------------- functions for docker images ----------------------------------- #
     @staticmethod    
     def just_images():
         """ prints the command docker images as it comes"""
@@ -28,7 +29,7 @@ class Docker_images:
             list_of_images.pop(0)
             list_of_images.pop(-1)
             return list_of_images
-    
+
     @staticmethod 
     def load_image(dir_to_image):
         """ load image from dir should be .zip/.tar file"""
@@ -39,16 +40,6 @@ class Docker_images:
         else:
             return sub.returncode, sub.stdout
     
-    @staticmethod
-    def rm_image(image_rep_tag):
-        """ remove image from docker by docker id"""
-
-        sub = subprocess.run(["docker","image", "rm", "-f", image_rep_tag], capture_output=True, text=True)
-        if sub.returncode == 1:
-            return sub.returncode, sub.stderr
-        else:
-            return sub.returncode, sub.stdout
-
     @staticmethod
     def run_image(image_rep_tag, port, vol, name, bash):
         """ runing an image with the ability to add ports and volumes, if running in bash == True the a terminal will be opened
@@ -67,7 +58,7 @@ class Docker_images:
             cmd_command = ""
             for items in command:
                 cmd_command = cmd_command + items + " "
-            # os.system("start cmd /c " + cmd_command) # for 
+            # os.system("start cmd /c " + cmd_command) # for windows
             os.system(f"gnome-terminal -e 'bash -c \"{cmd_command}; sleep 1000000\" '")
             return 0, 0
         else:
@@ -76,12 +67,22 @@ class Docker_images:
                 splited = items.split()
                 for item in splited:
                     subprocess_command.append(item)
-            print(subprocess_command)
             sub = subprocess.run(subprocess_command, capture_output=True, text=True)
             if sub.returncode == 1:
                 return sub.returncode, sub.stderr
             else:
                 return sub.returncode, sub.stdout
+
+    @staticmethod
+    def change_image_tag(image_rep_tag, new_image_rep_tag):
+        """ change the rep and tags of an image this also removes the old image with the old rep and tags"""
+
+        sub = subprocess.run(["docker","image", "tag", image_rep_tag, new_image_rep_tag], capture_output=True, text=True)
+        sub = subprocess.run(["docker","image", "rm", "-f", image_rep_tag], capture_output=True, text=True)
+        if sub.returncode == 1:
+            return sub.returncode, sub.stderr
+        else:
+            return sub.returncode, sub.stdout
 
     @staticmethod
     def save_image(image_rep_tag, dir_and_tar_name):
@@ -94,18 +95,17 @@ class Docker_images:
             return sub.returncode, sub.stdout
     
     @staticmethod
-    def change_image_tag(image_rep_tag, new_image_rep_tag):
-        """ change the rep and tags of an image this also removes the old image with the old rep and tags"""
+    def rm_image(image_rep_tag):
+        """ remove image from docker by docker id"""
 
-        sub = subprocess.run(["docker","image", "tag", image_rep_tag, new_image_rep_tag], capture_output=True, text=True)
         sub = subprocess.run(["docker","image", "rm", "-f", image_rep_tag], capture_output=True, text=True)
         if sub.returncode == 1:
             return sub.returncode, sub.stderr
         else:
             return sub.returncode, sub.stdout
-    
+
 class Docker_container:
-    # ------------------------------------------------   functions for docker containers ------------------------------------------------ #
+# ---------------- functions for docker containers ------------------------------- #
     @staticmethod
     def just_containers():
         """ prints the command "docker container ls --all" as it comes"""
@@ -219,7 +219,6 @@ class Docker_container:
             else:
                 return "container " + container_id + " is not running"
         
-
     @staticmethod
     def remove_container(container_id):
         """ removes a container by the container id this will also remove a running container"""
@@ -228,6 +227,3 @@ class Docker_container:
             return sub.returncode, sub.stderr
         else:  
             return sub.returncode, sub.stdout
-
-# a = Docker_images()
-# a.run_image("ubuntu", ["-p 80:130"], "", False)
