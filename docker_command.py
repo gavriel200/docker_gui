@@ -50,7 +50,7 @@ class Docker_images:
             return sub.returncode, sub.stdout
 
     @staticmethod
-    def run_image(image_rep_tag, port, vol, bash):
+    def run_image(image_rep_tag, port, vol, name, bash):
         """ runing an image with the ability to add ports and volumes, if running in bash == True the a terminal will be opened
         takes in the ports and volumes as a list of string e.g. ["-p 80:80","-p 60:130"]"""
 
@@ -59,25 +59,24 @@ class Docker_images:
             command.insert(2, vols)
         for ports in port:
             command.insert(2, ports)
+        for names in name:
+            command.insert(2, names)
         if bash == True:
             command.insert(2, '-it')
             command.extend(['bash'])
             cmd_command = ""
             for items in command:
                 cmd_command = cmd_command + items + " "
-            print(cmd_command)
             # os.system("start cmd /c " + cmd_command) # for 
             os.system(f"gnome-terminal -e 'bash -c \"{cmd_command}; sleep 1000000\" '")
             return 0, 0
-
         else:
-            print(command)
             subprocess_command = []
             for items in command:
                 splited = items.split()
                 for item in splited:
                     subprocess_command.append(item)
-
+            print(subprocess_command)
             sub = subprocess.run(subprocess_command, capture_output=True, text=True)
             if sub.returncode == 1:
                 return sub.returncode, sub.stderr

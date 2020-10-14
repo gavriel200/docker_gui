@@ -29,8 +29,9 @@ class Make_popup():
         self.reload_page = reload_page
         self.port = []
         self.vol = []
+        self.name = []
         self.bash = False
-        self.popup.geometry("350x300")
+        self.popup.geometry("350x350")
 
         self.main_frame = Frame(self.popup, width=350, height=300, bg="#0e1733")
         self.main_frame.pack()
@@ -42,7 +43,7 @@ class Make_popup():
             except:
                 pass
             # -------------------------------- adding the new main frame to work on ----------------------------------------------------------- #
-            self.main_frame = Frame(self.popup, width=350, height=300, bg="#0e1733")
+            self.main_frame = Frame(self.popup, width=350, height=350, bg="#0e1733")
             self.main_frame.pack()
 
             # ------------------------- adding the other frame where the vols and ports are displayed ----------------------------------------- #
@@ -103,19 +104,32 @@ class Make_popup():
                 self.vol_from_list.grid(col, 2)
                 col=col+1
 
+            # --------------------------------------- display name entry and label ------------------------------------------------------------- #
+            self.name_label = Make_label(self.main_frame, "name:", 16, "white", "#0e1733")
+            self.name_label.place(10, 257)
+            self.name_entry = Entry(self.main_frame, width=20)
+            self.name_entry.place(x = 80, y = 255)
+            try:
+                self.name_entry.insert(0,self.name[0].split(" ")[1])
+            except:
+                pass
+            self.name_add_button = Button(self.main_frame, text="ADD", bg="#344658", font=("Courier",14), fg = "white", cursor="hand2", 
+            command=lambda:name_add_function(self.name_entry.get()))
+            self.name_add_button.place(x = 250, y = 250)
+
             # ----------------------------- display the bash button in one color if bash is active if not the in another ----------------------- #
             if self.bash == False:
                 self.bash_button = Button(self.main_frame, text="bash", bg="#344658", font=("Courier",18), fg = "white", command = bash_button_function, cursor="hand2")
-                self.bash_button.place(x = 10, y = 250)
+                self.bash_button.place(x = 10, y = 300)
             else:
                 self.bash_button = Button(self.main_frame, text="bash", bg="#0e1733", font=("Courier",18), fg = "white", command = bash_button_function, cursor="hand2") 
-                self.bash_button.place(x = 10, y = 250)
+                self.bash_button.place(x = 10, y = 300)
                 self.running_in_bash = Make_label(self.main_frame, "running bash", 16, "white", "#0e1733")
-                self.running_in_bash.place(100, 260)
+                self.running_in_bash.place(100, 310)
             
             # ---------------------------------------- the run button  ------------------------------------------------------------------------- #
             self.run_button = Button(self.main_frame, text="RUN", bg="#344658", font=("Courier",18), fg = "white", command=run_button_function, cursor="hand2")
-            self.run_button.place(x = 270, y = 250)
+            self.run_button.place(x = 270, y = 300)
 
         def port_add_function(host_entry, cont_entry):
             try:
@@ -138,7 +152,6 @@ class Make_popup():
                     self.port.append(new_port)
                     self.port_host.delete(0, END)
                     self.port_cont.delete(0, END)
-                    print(self.port)
                     update_page()
             except:
                 self.port_host.delete(0, END)
@@ -160,13 +173,12 @@ class Make_popup():
                     self.vol.append(new_vol)
                     self.vol_host.delete(0, END)
                     self.vol_cont.delete(0, END)
-                    print(self.vol)
                     update_page()
             except:
                 self.vol_host.delete(0, END)
                 self.vol_cont.delete(0, END)
                 error_popup = Make_popup("ERROR")
-                error_popup.error("ERROR! make sure that you dont have two of the same volume")
+                error_popup.error("ERROR!")
                 self.popup.grab_set()                
 
         def bash_button_function():
@@ -175,12 +187,38 @@ class Make_popup():
             else:
                 self.bash = False
             update_page()
+        
+        def name_add_function(name_entry):
+            if " " in name_entry:
+                error_popup = Make_popup("ERROR")
+                error_popup.error("ERROR! you cant have spaces in the container name use _")
+                self.popup.grab_set()
+            elif len(name_entry) > 13:
+                error_popup = Make_popup("ERROR")
+                error_popup.error("ERROR! you should not make names so long")
+                self.popup.grab_set()
+            else:
+                if len(self.name) == 0:
+                    self.name.append(f"--name {name_entry}")
+                    update_page()
+                else:
+                    self.name.pop()
+                    self.name.append(f"--name {name_entry}")
+                    update_page()
+
 
         def run_button_function():
-            print(f"running {self.rep_tag} with ports {self.port}, and vol {self.vol} and {self.bash} bash")
-            run = Docker_images().run_image(self.rep_tag, self.port, self.vol, self.bash)
-            self.reload_page()
-            self.popup.destroy()
+            if len(self.name)==0:
+                error_popup = Make_popup("ERROR")
+                error_popup.error("ERROR! you should name your container so you could find it later")
+                self.popup.grab_set()
+            else:
+                name = self.name[0].split(" ")[1]
+                print(f"running {self.rep_tag} with ports {self.port}, volumes {self.vol}, name {name} and {self.bash} bash")
+                run = Docker_images().run_image(self.rep_tag, self.port, self.vol, self.name, self.bash)
+                self.reload_page()
+                self.popup.destroy()
+
         update_page()
 
     def edit_image_popup(self, rep_tag, reload_page):
@@ -242,26 +280,24 @@ class Make_popup():
                     self.popup.grab_set()
                 elif len(new_tag) == 0:
                     new_rep_tag = new_rep
-                    print(new_rep_tag)
                     edit = Docker_images().change_image_tag(self.rep_tag, new_rep_tag)
-                    print(edit)
                     if edit[0] == 1:
                         self.error_popup = Make_popup("ERROR")
                         self.error_popup.error(edit[1])
                         self.popup.grab_set()
                     else:
+                        print(f"changed {self.rep_tag} to {new_rep_tag}:latest")
                         self.reload_page()
                         self.popup.destroy()
                 else:
                     new_rep_tag = new_rep+":"+new_tag
-                    print(new_rep_tag)
                     edit = Docker_images().change_image_tag(self.rep_tag, new_rep_tag)
-                    print(edit)
                     if edit[0] == 1:
                         self.error_popup = Make_popup("ERROR")
                         self.error_popup.error(edit[1])
                         self.popup.grab_set()
                     else:
+                        print(f"changed {self.rep_tag} to {new_rep_tag}")
                         self.reload_page()
                         self.popup.destroy()
 
@@ -331,6 +367,7 @@ class Make_popup():
                         self.error_popup.error(save[1])
                         self.popup.grab_set()
                     else:
+                        print(f"saved image {self.rep_tag} to {self.save_file}")
                         self.reload_page()
                         self.popup.destroy()
 
@@ -356,6 +393,7 @@ class Make_popup():
                 self.error_popup.error(rm[1])
                 self.popup.grab_set()
             else:
+                print(f"removed image {self.rep_tag}")
                 self.reload_page()
                 self.popup.destroy()
 
