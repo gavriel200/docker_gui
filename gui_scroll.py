@@ -69,18 +69,18 @@ class Make_scrollbar():
             Label(self.frame, text=rows[6], bg="#0e1733", font=("Courier",10), fg="white").grid(row=row, column=4)
 
             # -------- adding the buttons --- #
-            self.run = Make_image_button(self.frame, "./run_button.png")
-            self.run.run_image(rows[0]+":"+rows[1], self.reload_image_page)
-            self.run.grid(5, row)
-            self.edit = Make_image_button(self.frame, "./edit_button.png")
-            self.edit.edit_image(rows[0]+":"+rows[1], self.reload_image_page)
-            self.edit.grid(6, row)
-            self.save = Make_image_button(self.frame, "./save_button.png")
-            self.save.save_image(rows[0]+":"+rows[1], self.reload_image_page)
-            self.save.grid(7, row)
-            self.rm = Make_image_button(self.frame, "./rm_button.png")
-            self.rm.rm_image(rows[0]+":"+rows[1], self.reload_image_page)
-            self.rm.grid(8, row)
+            self.run_button = Make_image_button(self.frame, "./run_button.png")
+            self.run_button.run_image(rows[0]+":"+rows[1], self.reload_image_page)
+            self.run_button.grid(5, row)
+            self.edit_button = Make_image_button(self.frame, "./edit_button.png")
+            self.edit_button.edit_image(rows[0]+":"+rows[1], self.reload_image_page)
+            self.edit_button.grid(6, row)
+            self.save_button = Make_image_button(self.frame, "./save_button.png")
+            self.save_button.save_image(rows[0]+":"+rows[1], self.reload_image_page)
+            self.save_button.grid(7, row)
+            self.rm_button = Make_image_button(self.frame, "./rm_button.png")
+            self.rm_button.rm_image(rows[0]+":"+rows[1], self.reload_image_page)
+            self.rm_button.grid(8, row)
             row = row + 1
 
     # ---------------- containers ------------------- #

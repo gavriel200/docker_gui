@@ -248,7 +248,8 @@ class Make_popup():
             else:
                 name = self.name[0].split(" ")[1]
                 print(f"running {self.rep_tag} with ports {self.port}, volumes {self.vol}, name {name} and {self.bash} bash")
-                run = Docker_images().run_image(self.rep_tag, self.port, self.vol, self.name, self.bash)
+                run = Docker_images()
+                run.run_image(self.rep_tag, self.port, self.vol, self.name, self.bash)
                 self.reload_page()
                 self.popup.destroy()
 

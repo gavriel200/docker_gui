@@ -69,8 +69,8 @@ class Make_image_button():
         self.button.configure(command=self.run_image_function)
 
     def run_image_function(self):
-        self.app = Make_popup("RUN IMAGE")
-        self.app.run_image_popup(self.rep_tag, self.reload_image_page)
+        self.pop_up = Make_popup("RUN IMAGE")
+        self.pop_up.run_image_popup(self.rep_tag, self.reload_image_page)
 
     # ---------------- edit ------------------ #
     def edit_image(self, rep_tag, reload_image_page):
@@ -79,8 +79,8 @@ class Make_image_button():
         self.button.configure(command=self.edit_image_function)
 
     def edit_image_function(self):
-        self.app = Make_popup("EDIT IMAGE NAME")
-        self.app.edit_image_popup(self.rep_tag, self.reload_image_page)
+        self.pop_up = Make_popup("EDIT IMAGE NAME")
+        self.pop_up.edit_image_popup(self.rep_tag, self.reload_image_page)
 
     # ---------------- save ------------------------ #
     def save_image(self, rep_tag, reload_image_page):
@@ -89,8 +89,8 @@ class Make_image_button():
         self.button.configure(command=self.save_image_function)
 
     def save_image_function(self):
-        self.app = Make_popup("SAVE IMAGE TO FILE")
-        self.app.save_image_popup(self.rep_tag, self.reload_image_page)
+        self.pop_up = Make_popup("SAVE IMAGE TO FILE")
+        self.pop_up.save_image_popup(self.rep_tag, self.reload_image_page)
 
     # ---------------- remove ---------------------- #
     def rm_image(self, rep_tag, reload_image_page):
@@ -99,8 +99,8 @@ class Make_image_button():
         self.button.configure(command=self.rm_image_function)
 
     def rm_image_function(self):
-        self.app = Make_popup("REMOVE IMAGE")
-        self.app.rm_image_popup(self.rep_tag, self.reload_image_page)
+        self.pop_up = Make_popup("REMOVE IMAGE")
+        self.pop_up.rm_image_popup(self.rep_tag, self.reload_image_page)
 
 # ---------------- placing the image button -------------------------------------- #
     def place(self, x, y):
