@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 
 from docker_command import Docker_images
+from docker_command import Docker_container
 from gui_label import Make_label
 from gui_popup import Make_popup
 
@@ -64,7 +65,7 @@ class Make_image_button():
 # ---------------- image page buttons -------------------------------------------- #
     # ---------------- run ------------------------- #
     def run_image(self, rep_tag, reload_image_page):
-        self.reload_image_page =reload_image_page
+        self.reload_image_page = reload_image_page
         self.rep_tag = rep_tag
         self.button.configure(command=self.run_image_function)
 
@@ -74,7 +75,7 @@ class Make_image_button():
 
     # ---------------- edit ------------------ #
     def edit_image(self, rep_tag, reload_image_page):
-        self.reload_image_page =reload_image_page
+        self.reload_image_page = reload_image_page
         self.rep_tag = rep_tag
         self.button.configure(command=self.edit_image_function)
 
@@ -84,7 +85,7 @@ class Make_image_button():
 
     # ---------------- save ------------------------ #
     def save_image(self, rep_tag, reload_image_page):
-        self.reload_image_page =reload_image_page
+        self.reload_image_page = reload_image_page
         self.rep_tag = rep_tag
         self.button.configure(command=self.save_image_function)
 
@@ -94,13 +95,73 @@ class Make_image_button():
 
     # ---------------- remove ---------------------- #
     def rm_image(self, rep_tag, reload_image_page):
-        self.reload_image_page =reload_image_page
+        self.reload_image_page = reload_image_page
         self.rep_tag = rep_tag
         self.button.configure(command=self.rm_image_function)
 
     def rm_image_function(self):
         self.pop_up = Make_popup("REMOVE IMAGE")
         self.pop_up.rm_image_popup(self.rep_tag, self.reload_image_page)
+
+# ---------------- container page buttons ---------------------------------------- #
+    # ---------------- start stop ------------------ #
+    def start_stop_container(self, cont_id, reload_container_page):
+        self.reload_container_page = reload_container_page
+        self.cont_id = cont_id
+        self.button.configure(command=self.start_stop_container_function)
+
+    def start_stop_container_function(self):
+        start_stop = Docker_container.start_or_stop_containers(self.cont_id)
+        if start_stop[0]==1:
+                error_popup = Make_popup("ERROR")
+                error_popup.error(start_stop[1]) 
+        else:
+            print(f"started/stoped container with id {self.cont_id}")
+            self.reload_container_page()
+
+    # ---------------- bash ------------------------ #
+    def bash_on_container(self, cont_id, reload_container_page):
+        self.reload_container_page = reload_container_page
+        self.cont_id = cont_id
+        self.button.configure(command=self.bash_on_container_function, state=NORMAL)
+
+    def bash_on_container_function(self):
+        start_bash = Docker_container.start_container_in_bash(self.cont_id)
+        if start_bash[0]==1:
+                error_popup = Make_popup("ERROR")
+                error_popup.error(start_bash[1]) 
+        else:
+            print(f"started container with id {self.cont_id} in bash")
+            self.reload_container_page()
+
+    def bash_off_container(self, cont_id, reload_container_page):
+        self.reload_container_page = reload_container_page
+        self.cont_id = cont_id
+        self.button.configure(command=self.bash_off_container_function, state=DISABLED)
+
+    def bash_off_container_function(self):
+        print(self.cont_id)
+
+    # ---------------- save ------------------------ #
+    def save_container(self, cont_id, reload_container_page):
+        self.reload_container_page = reload_container_page
+        self.cont_id = cont_id
+        self.button.configure(command=self.save_container_function)
+
+    def save_container_function(self):
+        self.pop_up = Make_popup("SAVE CONTAINER TO IMAGE")
+        self.pop_up.save_container_popup(self.cont_id, self.reload_container_page)
+
+    # ---------------- remove ---------------------- #
+    def rm_container(self, cont_id, reload_container_page, cont_name):
+        self.reload_container_page = reload_container_page
+        self.cont_id = cont_id
+        self.cont_name = cont_name
+        self.button.configure(command=self.rm_container_function)
+
+    def rm_container_function(self):
+        self.pop_up = Make_popup("REMOVE CONTAINER")
+        self.pop_up.rm_container_popup(self.cont_id, self.reload_container_page, self.cont_name)
 
 # ---------------- placing the image button -------------------------------------- #
     def place(self, x, y):

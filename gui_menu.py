@@ -56,8 +56,9 @@ class Make_menubutton():
         except:
             pass
         self.add_main_frame(self.top_frame)
-        l1 = Make_label(main_frame, "containers", 16, "#ffffff", "#203165")
-        l1.place(200,200)
+        # -------- add scrollbar -------- #
+        self.scrollbar_images = Make_scrollbar(scrollbar_frame, 485, 375, "#0e1733", "#0e1733")
+        self.scrollbar_images.containers_page_scrollbar(self.containers_page)
 
     # ---------------- sea -------------------------- #
     def menu_button_sea(self):
@@ -81,7 +82,7 @@ class Make_menubutton():
 
     # ---------------- home ------------------------- #
     def menu_button_home(self):
-        self.image = PhotoImage(file="./shark2.png")
+        self.image = PhotoImage(file="./images/shark2.png")
         self.button = Button(self.app_frame, image=self.image, borderwidth=0, cursor="hand2", command=lambda:self.home_page())
         self.button.place(x=375,y=0)
 

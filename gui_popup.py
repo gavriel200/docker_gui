@@ -460,6 +460,20 @@ class Make_popup():
                 self.popup.destroy()
 
 # ---------------- containers page popup ----------------------------------------- #
+    # ---------------- save ------------------------ #
+    def save_container_popup(self, cont_id, reload_page):
+        self.cont_id = cont_id
+        self.reload_page = reload_page  
+
+        self.popup.geometry("360x180")
+
+    # ---------------- remove ---------------------- #
+    def rm_container_popup(self, cont_id, reload_page, cont_name):
+        self.cont_id = cont_id
+        self.reload_page = reload_page
+        self.cont_name = cont_name
+
+        self.popup.geometry("300x100")
 
 # ---------------- sea page popup ------------------------------------------------ #
 

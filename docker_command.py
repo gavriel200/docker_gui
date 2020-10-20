@@ -210,11 +210,12 @@ class Docker_container:
             list_of_running_containers.pop(-1)
             for containers in list_of_running_containers:
                 list_of_ids.append(containers[0])
-
             if container_id in list_of_ids:
-                cmd_command = "docker exec -it " + container_id + " bash"
-                print(cmd_command)
-                os.system("start cmd /c " + cmd_command)
+                # cmd_command = "docker exec -it " + container_id + " bash" ------ windows
+                terminal_command = "docker exec -it " + container_id + " bash"  # ----- ubuntu
+                print(terminal_command)
+                os.system(f"gnome-terminal -e 'bash -c \"{terminal_command}; sleep 1000000\" '") # ----- ubuntu
+                # os.system("start cmd /c " + cmd_command) ------ windows
                 return "opening bash"
             else:
                 return "container " + container_id + " is not running"

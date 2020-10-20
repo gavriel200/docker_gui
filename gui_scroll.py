@@ -1,6 +1,7 @@
 from tkinter import *
 
 from docker_command import Docker_images
+from docker_command import Docker_container
 from gui_button import Make_button
 from gui_button import Make_image_button
 from gui_label import Make_label
@@ -39,18 +40,18 @@ class Make_scrollbar():
         # -------- reload page fun ------ #
         self.reload_image_page = reload_image_page
         # -------- menu bar ~ ----------- #
-        self.rep = Make_label(self.frame, "    rep   ", 10, "white", "#0e1733")
-        self.rep.grid(0,0)
-        self.tag = Make_label(self.frame, "|   tag  |", 10, "white", "#0e1733")
-        self.tag.grid(1,0)
-        self.image_id = Make_label(self.frame, "  id     ", 10, "white", "#0e1733")
-        self.image_id.grid(2,0)
-        self.created = Make_label(self.frame, "|created ", 10, "white", "#0e1733")
-        self.created.grid(3,0)
-        self.size = Make_label(self.frame, "| size ", 10, "white", "#0e1733")
-        self.size.grid(4,0)
+        self.img_rep_label = Make_label(self.frame, "    rep   ", 10, "white", "#0e1733")
+        self.img_rep_label.grid(0,0)
+        self.img_tag_label = Make_label(self.frame, "|   tag  |", 10, "white", "#0e1733")
+        self.img_tag_label.grid(1,0)
+        self.img_image_id_label = Make_label(self.frame, "  id     ", 10, "white", "#0e1733")
+        self.img_image_id_label.grid(2,0)
+        self.img_created_label = Make_label(self.frame, "|created ", 10, "white", "#0e1733")
+        self.img_created_label.grid(3,0)
+        self.img_size_label = Make_label(self.frame, "| size ", 10, "white", "#0e1733")
+        self.img_size_label.grid(4,0)
 
-        # -------- get list of images --- #
+        # -------- get images list ------ #
         images = Docker_images.list_images()
 
         row = 1
@@ -69,20 +70,69 @@ class Make_scrollbar():
             Label(self.frame, text=rows[6], bg="#0e1733", font=("Courier",10), fg="white").grid(row=row, column=4)
 
             # -------- adding the buttons --- #
-            self.run_button = Make_image_button(self.frame, "./run_button.png")
-            self.run_button.run_image(rows[0]+":"+rows[1], self.reload_image_page)
-            self.run_button.grid(5, row)
-            self.edit_button = Make_image_button(self.frame, "./edit_button.png")
-            self.edit_button.edit_image(rows[0]+":"+rows[1], self.reload_image_page)
-            self.edit_button.grid(6, row)
-            self.save_button = Make_image_button(self.frame, "./save_button.png")
-            self.save_button.save_image(rows[0]+":"+rows[1], self.reload_image_page)
-            self.save_button.grid(7, row)
-            self.rm_button = Make_image_button(self.frame, "./rm_button.png")
-            self.rm_button.rm_image(rows[0]+":"+rows[1], self.reload_image_page)
-            self.rm_button.grid(8, row)
+            self.img_run_button = Make_image_button(self.frame, "./images/run_button.png")
+            self.img_run_button.run_image(rows[0]+":"+rows[1], self.reload_image_page)
+            self.img_run_button.grid(5, row)
+            self.img_edit_button = Make_image_button(self.frame, "./images/edit_button.png")
+            self.img_edit_button.edit_image(rows[0]+":"+rows[1], self.reload_image_page)
+            self.img_edit_button.grid(6, row)
+            self.img_save_button = Make_image_button(self.frame, "./images/save_button.png")
+            self.img_save_button.save_image(rows[0]+":"+rows[1], self.reload_image_page)
+            self.img_save_button.grid(7, row)
+            self.img_rm_button = Make_image_button(self.frame, "./images/rm_button.png")
+            self.img_rm_button.rm_image(rows[0]+":"+rows[1], self.reload_image_page)
+            self.img_rm_button.grid(8, row)
             row = row + 1
 
     # ---------------- containers ------------------- #
+    def containers_page_scrollbar(self, reload_container_page):
+        # -------- reload page fun ------ #
+        self.reload_container_page = reload_container_page
+        # -------- menu bar ~ ----------- #
+        self.cont_name_label = Make_label(self.frame, "    name   ", 10, "white", "#0e1733")
+        self.cont_name_label.grid(0,0)
+        self.cont_cont_id_label = Make_label(self.frame, "| container id", 10, "white", "#0e1733")
+        self.cont_cont_id_label.grid(1,0)
+        self.cont_image_label = Make_label(self.frame, "|     image     |", 10, "white", "#0e1733")
+        self.cont_image_label.grid(2,0)
+        # -------- get containers list ---#
+        containers = Docker_container.list_containers()
+        running_containers = Docker_container.running_containers() #lists ids of running contianers
+        
+        row = 1
+        for rows in containers:
+            # -------- adding the containers - #
+            if len(rows[-1]) > 20:
+                Label(self.frame, text=rows[-1], bg="#0e1733", font=("Courier",6), fg="white").grid(row=row, column=0)
+            else:
+                Label(self.frame, text=rows[-1], bg="#0e1733", font=("Courier",8), fg="white").grid(row=row, column=0)
+            Label(self.frame, text=rows[0], bg="#0e1733", font=("Courier",8), fg="white").grid(row=row, column=1)
+            if len(rows[1]) > 21:
+                Label(self.frame, text=rows[1], bg="#0e1733", font=("Courier",6), fg="white").grid(row=row, column=2)
+            else:
+                Label(self.frame, text=rows[1], bg="#0e1733", font=("Courier",8), fg="white").grid(row=row, column=2)
+            
+            # -------- adding the buttons --- #
+            if rows[0] in running_containers:
+                self.cont_start_stop_button = Make_image_button(self.frame, "./images/stop_button_cont.png")
+                self.cont_start_stop_button.start_stop_container(rows[0], self.reload_container_page)
+                self.cont_start_stop_button.grid(3, row)
+                self.cont_bash_button = Make_image_button(self.frame, "./images/bash_button_on_cont.png")
+                self.cont_bash_button.bash_on_container(rows[0], self.reload_container_page)
+                self.cont_bash_button.grid(4, row)
+            else:
+                self.cont_start_stop_button = Make_image_button(self.frame, "./images/start_button_cont.png")
+                self.cont_start_stop_button.start_stop_container(rows[0], self.reload_container_page)
+                self.cont_start_stop_button.grid(3, row)
+                self.cont_bash_button = Make_image_button(self.frame, "./images/bash_button_off_cont.png")
+                self.cont_bash_button.bash_off_container(rows[0], self.reload_container_page)
+                self.cont_bash_button.grid(4, row)
+            self.cont_save_button = Make_image_button(self.frame, "./images/save_button.png")
+            self.cont_save_button.save_container(rows[0], self.reload_container_page)
+            self.cont_save_button.grid(5, row)
+            self.cont_rm_button = Make_image_button(self.frame, "./images/rm_button.png")
+            self.cont_rm_button.rm_container(rows[0], self.reload_container_page, rows[-1])
+            self.cont_rm_button.grid(6, row)
+            row = row + 1
 
     # ---------------- sea -------------------------- #
