@@ -66,7 +66,10 @@ class Make_scrollbar():
             else:
                 Label(self.frame, text=rows[1], bg="#0e1733", font=("Courier",9), fg="white").grid(row=row, column=1)
             Label(self.frame, text=rows[2], bg="#0e1733", font=("Courier",8), fg="white").grid(row=row, column=2)
-            Label(self.frame, text=(str(rows[3])+" "+str(rows[4])+" "+str(rows[5])), bg="#0e1733", font=("Courier",7), fg="white").grid(row=row, column=3)
+            if len(str(rows[3])+" "+str(rows[4])+" "+str(rows[5])) > 13:
+                Label(self.frame, text=(str(rows[3])+" "+str(rows[4])+" "+str(rows[5])), bg="#0e1733", font=("Courier",6), fg="white").grid(row=row, column=3)
+            else:
+                Label(self.frame, text=(str(rows[3])+" "+str(rows[4])+" "+str(rows[5])), bg="#0e1733", font=("Courier",7), fg="white").grid(row=row, column=3)
             Label(self.frame, text=rows[6], bg="#0e1733", font=("Courier",10), fg="white").grid(row=row, column=4)
 
             # -------- adding the buttons --- #
@@ -128,11 +131,9 @@ class Make_scrollbar():
                 self.cont_bash_button.bash_off_container(rows[0], self.reload_container_page)
                 self.cont_bash_button.grid(4, row)
             self.cont_save_button = Make_image_button(self.frame, "./images/save_button.png")
-            self.cont_save_button.save_container(rows[0], self.reload_container_page)
+            self.cont_save_button.save_container(rows[0], self.reload_container_page, rows[-1])
             self.cont_save_button.grid(5, row)
             self.cont_rm_button = Make_image_button(self.frame, "./images/rm_button.png")
             self.cont_rm_button.rm_container(rows[0], self.reload_container_page, rows[-1])
             self.cont_rm_button.grid(6, row)
             row = row + 1
-
-    # ---------------- sea -------------------------- #

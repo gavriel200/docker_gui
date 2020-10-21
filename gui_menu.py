@@ -17,7 +17,7 @@ class Make_menubutton():
     # ---------------- images ----------------------- #
     def menu_button_images(self):
         self.button = Button(self.app_frame, text = "images", bg="#0e1733", fg="white", cursor="hand2",
-        activeforeground="#bfbfbf", activebackground="#0e1733", borderwidth=0, padx=22, pady=39, command=lambda:self.images_page(), font=("Courier", 16))
+        activeforeground="#bfbfbf", activebackground="#0e1733", borderwidth=0, padx=55, pady=39, command=lambda:self.images_page(), font=("Courier", 16))
         self.button.place(x=0,y=0)
 
     def images_page(self):
@@ -42,8 +42,8 @@ class Make_menubutton():
     # ---------------- containers ------------------- #
     def menu_button_containers(self):
         self.button = Button(self.app_frame, text = "containers", bg="#0e1733", fg="white", cursor="hand2",
-        activeforeground="#bfbfbf", activebackground="#0e1733", borderwidth=0, padx=6, pady=40, command=lambda:self.containers_page(), font=("Courier", 14))
-        self.button.place(x=125,y=0)
+        activeforeground="#bfbfbf", activebackground="#0e1733", borderwidth=0, padx=40, pady=40, command=lambda:self.containers_page(), font=("Courier", 14))
+        self.button.place(x=187,y=0)
 
     def containers_page(self):
         # -------- reload page ---------- #
@@ -59,26 +59,6 @@ class Make_menubutton():
         # -------- add scrollbar -------- #
         self.scrollbar_images = Make_scrollbar(scrollbar_frame, 485, 375, "#0e1733", "#0e1733")
         self.scrollbar_images.containers_page_scrollbar(self.containers_page)
-
-    # ---------------- sea -------------------------- #
-    def menu_button_sea(self):
-        self.button = Button(self.app_frame, text = "sea", bg="#0e1733", fg="white", cursor="hand2",
-        activeforeground="#bfbfbf", activebackground="#0e1733", borderwidth=0, padx=34, pady=34, command=lambda:self.sea_page(), font=("Courier", 23))
-        self.button.place(x=250,y=0)
-
-    def sea_page(self):
-        # -------- reload page ---------- #
-        try:
-            self.remove_startup_frame()
-        except:
-            pass
-        try:
-            self.remove_main_frame(main_frame)
-        except:
-            pass
-        self.add_main_frame(self.top_frame)
-        l1 = Make_label(main_frame, "sea", 16, "#ffffff", "#203165")
-        l1.place(200,200)
 
     # ---------------- home ------------------------- #
     def menu_button_home(self):

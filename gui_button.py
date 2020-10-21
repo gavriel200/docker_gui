@@ -111,7 +111,7 @@ class Make_image_button():
         self.button.configure(command=self.start_stop_container_function)
 
     def start_stop_container_function(self):
-        start_stop = Docker_container.start_or_stop_containers(self.cont_id)
+        start_stop = Docker_container().start_or_stop_containers(self.cont_id)
         if start_stop[0]==1:
                 error_popup = Make_popup("ERROR")
                 error_popup.error(start_stop[1]) 
@@ -126,7 +126,7 @@ class Make_image_button():
         self.button.configure(command=self.bash_on_container_function, state=NORMAL)
 
     def bash_on_container_function(self):
-        start_bash = Docker_container.start_container_in_bash(self.cont_id)
+        start_bash = Docker_container().start_container_in_bash(self.cont_id)
         if start_bash[0]==1:
                 error_popup = Make_popup("ERROR")
                 error_popup.error(start_bash[1]) 
@@ -140,17 +140,18 @@ class Make_image_button():
         self.button.configure(command=self.bash_off_container_function, state=DISABLED)
 
     def bash_off_container_function(self):
-        print(self.cont_id)
+        pass
 
     # ---------------- save ------------------------ #
-    def save_container(self, cont_id, reload_container_page):
+    def save_container(self, cont_id, reload_container_page, cont_name):
         self.reload_container_page = reload_container_page
         self.cont_id = cont_id
+        self.cont_name = cont_name
         self.button.configure(command=self.save_container_function)
 
     def save_container_function(self):
         self.pop_up = Make_popup("SAVE CONTAINER TO IMAGE")
-        self.pop_up.save_container_popup(self.cont_id, self.reload_container_page)
+        self.pop_up.save_container_popup(self.cont_id, self.reload_container_page, self.cont_name)
 
     # ---------------- remove ---------------------- #
     def rm_container(self, cont_id, reload_container_page, cont_name):

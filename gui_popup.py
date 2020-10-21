@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 
 from docker_command import Docker_images
+from docker_command import Docker_container
 from gui_label import Make_label
 
 # -------------------------------------------------------------------------------- #
@@ -436,7 +437,7 @@ class Make_popup():
         self.popup.geometry("300x100")
 
         # -------- rep name ------------- #
-        self.label = Make_label(self.popup, f"are you sure you want to remove\n{rep_tag}?", 10, "white", "#0e1733")
+        self.label = Make_label(self.popup, f"are you sure you want to remove\n{self.rep_tag}?", 10, "white", "#0e1733")
         self.label.place(25,10)
 
         # -------- cancel button -------- #
@@ -461,11 +462,73 @@ class Make_popup():
 
 # ---------------- containers page popup ----------------------------------------- #
     # ---------------- save ------------------------ #
-    def save_container_popup(self, cont_id, reload_page):
+    def save_container_popup(self, cont_id, reload_page, cont_name):
         self.cont_id = cont_id
-        self.reload_page = reload_page  
+        self.reload_page = reload_page 
+        self.cont_name = cont_name
 
         self.popup.geometry("360x180")
+
+        # -------- container name ------- #
+        self.cont_name_label = Make_label(self.popup, f"save {self.cont_name}", 14, "white", "#0e1733")
+        self.cont_name_label.place(30, 17)
+
+        # -------- entry for new name --- #
+        self.new_rep = Entry(self.popup,  width = 15)
+        self.new_rep.place(x = 30, y = 50)
+        
+        self.new_tag = Entry(self.popup,  width = 15)
+        self.new_tag.place(x = 203, y = 50)
+
+        self.seperate_new = Make_label(self.popup, ":", 19, "white", "#0e1733")
+        self.seperate_new.place(170, 50)
+
+        self.save_cont_button = Button(self.popup, text="save", bg="#344658", font=("Courier",38), fg = "white", width=9, height=0, command=lambda:save_cont_button_function(),  cursor="hand2")
+        self.save_cont_button.place(x = 30, y = 90)
+
+        # -------- save command --------- #
+        def save_cont_button_function(): # should add check to see if image name already exists
+            # -------- check name exists ---- #
+            if len(self.new_rep.get()) == 0:
+                self.error_popup = Make_popup("ERROR")
+                self.error_popup.error("ERROR! you should have a rep name!")
+                self.popup.grab_set()
+            # -------- check len rep -------- #
+            elif len(self.new_rep.get()) > 13:
+                self.error_popup = Make_popup("ERROR")
+                self.error_popup.error("ERROR! you should not have rep name so long!")
+                self.popup.grab_set()
+            else:
+                # -------- check if tag --------- #
+                if len(self.new_tag.get()) == 0:
+                    save = Docker_container().save_container(self.cont_id, self.new_rep.get())
+                    if save[0] == 1:
+                        self.error_popup = Make_popup("ERROR")
+                        self.error_popup.error(save[1])
+                        self.popup.grab_set()
+                    else:
+                        self.reload_page()
+                        self.popup.destroy()
+                else:
+                    # -------- check name exists ---- #
+                    if len(self.new_tag.get()) == 0:
+                        self.error_popup = Make_popup("ERROR")
+                        self.error_popup.error("ERROR! you should have a tag name!")
+                        self.popup.grab_set()
+                    # -------- check len tag -------- #
+                    elif len(self.new_tag.get()) > 13:
+                        self.error_popup = Make_popup("ERROR")
+                        self.error_popup.error("ERROR! you should not have tag name so long!")
+                        self.popup.grab_set()
+                    else:
+                        save = Docker_container().save_container(self.cont_id, f"{self.new_rep.get()}:{self.new_tag.get()}")
+                        if save[0] == 1:
+                            self.error_popup = Make_popup("ERROR")
+                            self.error_popup.error(save[1])
+                            self.popup.grab_set()
+                        else:
+                            self.reload_page()
+                            self.popup.destroy()
 
     # ---------------- remove ---------------------- #
     def rm_container_popup(self, cont_id, reload_page, cont_name):
@@ -475,7 +538,30 @@ class Make_popup():
 
         self.popup.geometry("300x100")
 
-# ---------------- sea page popup ------------------------------------------------ #
+        # -------- rep name ------------- #
+        self.label = Make_label(self.popup, f"are you sure you want to remove\n{self.cont_name}?", 10, "white", "#0e1733")
+        self.label.place(25,10)
+
+        # -------- cancel button -------- #
+        self.cancel_button = Button(self.popup, text="cancel", bg="#344658", font=("Courier",15), fg = "white", width=5, height=0, command=self.popup.destroy,  cursor="hand2")
+        self.cancel_button.place(x = 10,y = 55)
+
+        # -------- remove button -------- #
+        self.rm_button =  Button(self.popup, text="REMOVE", bg="#344658", font=("Courier",15), fg = "white", width=5, height=0, command=lambda:rm_button_function(),  cursor="hand2")
+        self.rm_button.place(x = 200,y = 55)
+
+        # -------- remove command ------- #
+        def rm_button_function():
+            rm = Docker_container().remove_container(self.cont_id)
+            if rm[0] == 1:
+                self.error_popup = Make_popup("ERROR")
+                self.error_popup.error(rm[1])
+                self.popup.grab_set()
+            else:
+                print(f"removed image {self.cont_name}")
+                self.reload_page()
+                self.popup.destroy()
+
 
 class Remove_vols_and_ports():
 # ---------------- create vols and ports objects --------------------------------- #

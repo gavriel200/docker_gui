@@ -25,8 +25,6 @@ class MainApplication():
         self.menu_images.menu_button_images()
         self.menu_containers = Make_menubutton(self.top_frame, self.app, self.startup_frame)
         self.menu_containers.menu_button_containers()
-        self.menu_sea = Make_menubutton(self.top_frame, self.app, self.startup_frame)
-        self.menu_sea.menu_button_sea()
         self.menu_home = Make_menubutton(self.top_frame, self.app, self.startup_frame)
         self.menu_home.menu_button_home()
 
