@@ -1,8 +1,8 @@
+import os
 from tkinter import *
 from tkinter import filedialog
 
-from docker_command import Docker_images
-from docker_command import Docker_container
+from docker_command import Docker_container, Docker_images
 from gui_label import Make_label
 
 # -------------------------------------------------------------------------------- #
@@ -187,26 +187,30 @@ class Make_popup():
                 self.popup.grab_set()
 
         def vol_add_function(host_entry, cont_entry):
-            try:
-                new_vol = f"-v {host_entry}:{cont_entry}"
-                # -------- check if exists ------ #
-                if new_vol in self.vol:
-                    self.vol_host.delete(0, END)
-                    self.vol_cont.delete(0, END)
+            new_vol = f"-v {host_entry}:{cont_entry}"
+            # -------- check vol len -------- #
+            if len(host_entry) == 0 or len(cont_entry) == 0:
+                error_popup = Make_popup("ERROR")
+                error_popup.error("ERROR! you should write volumes befor adding")
+                self.popup.grab_set()
+            # -------- check if exists ------ #
+            elif new_vol in self.vol:
+                self.vol_host.delete(0, END)
+                self.vol_cont.delete(0, END)
+                error_popup = Make_popup("ERROR")
+                error_popup.error("ERROR! make sure that you dont have two of the same volume")
+                self.popup.grab_set()
+            else:
+                if os.path.isdir(host_entry) == False:
                     error_popup = Make_popup("ERROR")
-                    error_popup.error("ERROR! make sure that you dont have two of the same volume")
+                    error_popup.error("ERROR! you wrote a bad directory on your host side")
                     self.popup.grab_set()
                 else:
                     self.vol.append(new_vol)
                     self.vol_host.delete(0, END)
                     self.vol_cont.delete(0, END)
                     update_page()
-            except:
-                self.vol_host.delete(0, END)
-                self.vol_cont.delete(0, END)
-                error_popup = Make_popup("ERROR")
-                error_popup.error("ERROR!")
-                self.popup.grab_set()                
+               
 
         # -------- bash on off ---------- #
         def bash_button_function():
@@ -219,8 +223,17 @@ class Make_popup():
         
         # -------- add image name ------- #
         def name_add_function(name_entry):
-            # -------- check if spaces ------ #
-            if " " in name_entry:
+            containers = Docker_container().list_containers()
+            name_list = []
+            for rows in containers:
+                name_list.append(rows[-1])
+            # -------- check name exists ---- #
+            if len(name_entry) == 0:
+                error_popup = Make_popup("ERROR")
+                error_popup.error("ERROR! you need to write a name")
+                self.popup.grab_set()
+            # -------- check spaces --------- #
+            elif " " in name_entry:
                 error_popup = Make_popup("ERROR")
                 error_popup.error("ERROR! you cant have spaces in the container name use _")
                 self.popup.grab_set()
@@ -229,7 +242,11 @@ class Make_popup():
                 error_popup = Make_popup("ERROR")
                 error_popup.error("ERROR! you should not make names so long")
                 self.popup.grab_set()
-            # add a check if name alredy exists
+            # -------- check name already ex  #
+            elif name_entry in name_list: 
+                error_popup = Make_popup("ERROR")
+                error_popup.error(f"ERROR! container name {name_entry} already used")
+                self.popup.grab_set()
             else:
                 if len(self.name) == 0:
                     self.name.append(f"--name {name_entry}")
@@ -248,11 +265,18 @@ class Make_popup():
                 self.popup.grab_set()
             else:
                 name = self.name[0].split(" ")[1]
-                print(f"running {self.rep_tag} with ports {self.port}, volumes {self.vol}, name {name} and {self.bash} bash")
-                run = Docker_images()
-                run.run_image(self.rep_tag, self.port, self.vol, self.name, self.bash)
-                self.reload_page()
-                self.popup.destroy()
+                run = Docker_images().run_image(self.rep_tag, self.port, self.vol, self.name, self.bash)
+                if run[0] != 0:
+                    error_popup = Make_popup("ERROR")
+                    if len(run[1]) == 0:
+                        error_popup.error(f"ERROR! unknown error check your ports/vols and name")
+                    else:
+                        error_popup.error(f"ERROR!{run[1]}")
+                    self.popup.grab_set()
+                else:
+                    print(f"running {self.rep_tag} with ports {self.port}, volumes {self.vol}, name {name} and {self.bash} bash")
+                    self.reload_page()
+                    self.popup.destroy()
 
         # -------- start the page ------- #
         update_page()
@@ -325,29 +349,49 @@ class Make_popup():
                     error_popup.error("ERROR! you should not make tags so long")
                     self.popup.grab_set()
                 elif len(new_tag) == 0:
-                    # -------- edit rep:latest ------ #
-                    new_rep_tag = new_rep
-                    edit = Docker_images().change_image_tag(self.rep_tag, new_rep_tag)
-                    if edit[0] == 1:
-                        self.error_popup = Make_popup("ERROR")
-                        self.error_popup.error(edit[1])
+                    # -------- check image exists --- #
+                    new_rep_tag = new_rep + ":latest"
+                    images_names = []
+                    images = Docker_images().list_images()
+                    for rows in images:
+                        images_names.append(rows[0]+":"+rows[1])
+                    if new_rep_tag in images_names:
+                        error_popup = Make_popup("ERROR")
+                        error_popup.error("ERROR! image name already exists")
                         self.popup.grab_set()
                     else:
-                        print(f"changed {self.rep_tag} to {new_rep_tag}:latest")
-                        self.reload_page()
-                        self.popup.destroy()
+                        # -------- edit rep:latest ------ #
+                        edit = Docker_images().change_image_tag(self.rep_tag, new_rep_tag)
+                        if edit[0] != 0:
+                            self.error_popup = Make_popup("ERROR")
+                            self.error_popup.error(edit[1])
+                            self.popup.grab_set()
+                        else:
+                            print(f"changed {self.rep_tag} to {new_rep_tag}:latest")
+                            self.reload_page()
+                            self.popup.destroy()
                 else:
-                    # -------- edit rep:tag --------- #
+                    # -------- check image exists --- #
                     new_rep_tag = new_rep+":"+new_tag
-                    edit = Docker_images().change_image_tag(self.rep_tag, new_rep_tag)
-                    if edit[0] == 1:
-                        self.error_popup = Make_popup("ERROR")
-                        self.error_popup.error(edit[1])
+                    images_names = []
+                    images = Docker_images().list_images()
+                    for rows in images:
+                        images_names.append(rows[0]+":"+rows[1])
+                    if new_rep_tag in images_names:
+                        error_popup = Make_popup("ERROR")
+                        error_popup.error("ERROR! image name already exists")
                         self.popup.grab_set()
                     else:
-                        print(f"changed {self.rep_tag} to {new_rep_tag}")
-                        self.reload_page()
-                        self.popup.destroy()
+                        # -------- edit rep:tag --------- #
+                        edit = Docker_images().change_image_tag(self.rep_tag, new_rep_tag)
+                        if edit[0] != 0:
+                            self.error_popup = Make_popup("ERROR")
+                            self.error_popup.error(edit[1])
+                            self.popup.grab_set()
+                        else:
+                            print(f"changed {self.rep_tag} to {new_rep_tag}")
+                            self.reload_page()
+                            self.popup.destroy()
 
     # ---------------- save ------------------------ #
     def save_image_popup(self, rep_tag, reload_page):
@@ -420,7 +464,7 @@ class Make_popup():
                 else:
                     self.save_file = self.dir + "/" + self.file + ".tar"
                     save = Docker_images().save_image(self.rep_tag, self.save_file)
-                    if save[0] == 1:
+                    if save[0] != 0:
                         self.error_popup = Make_popup("ERROR")
                         self.error_popup.error(save[1])
                         self.popup.grab_set()
@@ -437,7 +481,10 @@ class Make_popup():
         self.popup.geometry("300x100")
 
         # -------- rep name ------------- #
-        self.label = Make_label(self.popup, f"are you sure you want to remove\n{self.rep_tag}?", 10, "white", "#0e1733")
+        if ":" in self.rep_tag:
+            self.label = Make_label(self.popup, f"are you sure you want to remove\n{self.rep_tag}?", 10, "white", "#0e1733")
+        else:
+            self.label = Make_label(self.popup, f"are you sure you want to remove\n<none>:<none>?", 10, "white", "#0e1733")
         self.label.place(25,10)
 
         # -------- cancel button -------- #
@@ -451,7 +498,7 @@ class Make_popup():
         # -------- remove command ------- #
         def rm_button_function():
             rm = Docker_images().rm_image(self.rep_tag)
-            if rm[0] == 1:
+            if rm[0] != 0:
                 self.error_popup = Make_popup("ERROR")
                 self.error_popup.error(rm[1])
                 self.popup.grab_set()
@@ -483,51 +530,77 @@ class Make_popup():
         self.seperate_new = Make_label(self.popup, ":", 19, "white", "#0e1733")
         self.seperate_new.place(170, 50)
 
-        self.save_cont_button = Button(self.popup, text="save", bg="#344658", font=("Courier",38), fg = "white", width=9, height=0, command=lambda:save_cont_button_function(),  cursor="hand2")
+        self.save_cont_button = Button(self.popup, text="save", bg="#344658", font=("Courier",38), fg = "white", width=9, height=0,
+        command=lambda:save_cont_button_function(self.new_rep.get(), self.new_tag.get()),  cursor="hand2")
         self.save_cont_button.place(x = 30, y = 90)
 
         # -------- save command --------- #
-        def save_cont_button_function(): # should add check to see if image name already exists
-            # -------- check name exists ---- #
-            if len(self.new_rep.get()) == 0:
-                self.error_popup = Make_popup("ERROR")
-                self.error_popup.error("ERROR! you should have a rep name!")
+        def save_cont_button_function(new_rep, new_tag):
+            # -------- check if rep name ---- #
+            if len(new_rep) == 0:
+                error_popup = Make_popup("ERROR")
+                error_popup.error("ERROR! make sure you write a reposotry name")
                 self.popup.grab_set()
-            # -------- check len rep -------- #
-            elif len(self.new_rep.get()) > 13:
-                self.error_popup = Make_popup("ERROR")
-                self.error_popup.error("ERROR! you should not have rep name so long!")
+            # -------- check rep len -------- #
+            if len(new_rep) > 13:
+                error_popup = Make_popup("ERROR")
+                error_popup.error("ERROR! you should not make names so long")
+                self.popup.grab_set()
+            # -------- check rep spaces ----- #
+            elif " " in new_rep:
+                error_popup = Make_popup("ERROR")
+                error_popup.error("ERROR! should not have spaces in rep name")
                 self.popup.grab_set()
             else:
-                # -------- check if tag --------- #
-                if len(self.new_tag.get()) == 0:
-                    save = Docker_container().save_container(self.cont_id, self.new_rep.get())
-                    if save[0] == 1:
-                        self.error_popup = Make_popup("ERROR")
-                        self.error_popup.error(save[1])
+                # -------- check tag spaces ----- #
+                if " " in new_tag:
+                    error_popup = Make_popup("ERROR")
+                    error_popup.error("ERROR! should not have spaces in tag name")
+                    self.popup.grab_set()
+                # -------- check tag len -------- #
+                elif len(new_tag) >13:
+                    error_popup = Make_popup("ERROR")
+                    error_popup.error("ERROR! you should not make tags so long")
+                    self.popup.grab_set()
+                elif len(new_tag) == 0:
+                    # -------- check image exists --- #
+                    new_rep_tag = new_rep + ":latest"
+                    images_names = []
+                    images = Docker_images().list_images()
+                    for rows in images:
+                        images_names.append(rows[0]+":"+rows[1])
+                    if new_rep_tag in images_names:
+                        error_popup = Make_popup("ERROR")
+                        error_popup.error("ERROR! image name already exists")
                         self.popup.grab_set()
                     else:
-                        self.reload_page()
-                        self.popup.destroy()
-                else:
-                    # -------- check name exists ---- #
-                    if len(self.new_tag.get()) == 0:
-                        self.error_popup = Make_popup("ERROR")
-                        self.error_popup.error("ERROR! you should have a tag name!")
-                        self.popup.grab_set()
-                    # -------- check len tag -------- #
-                    elif len(self.new_tag.get()) > 13:
-                        self.error_popup = Make_popup("ERROR")
-                        self.error_popup.error("ERROR! you should not have tag name so long!")
-                        self.popup.grab_set()
-                    else:
-                        save = Docker_container().save_container(self.cont_id, f"{self.new_rep.get()}:{self.new_tag.get()}")
-                        if save[0] == 1:
+                        # -------- edit rep:latest ------ #
+                        save = Docker_container().save_container(self.cont_id, new_rep_tag)
+                        if save[0] != 0:
                             self.error_popup = Make_popup("ERROR")
                             self.error_popup.error(save[1])
                             self.popup.grab_set()
                         else:
-                            self.reload_page()
+                            self.popup.destroy()
+                else:
+                    # -------- check image exists --- #
+                    new_rep_tag = new_rep+":"+new_tag
+                    images_names = []
+                    images = Docker_images().list_images()
+                    for rows in images:
+                        images_names.append(rows[0]+":"+rows[1])
+                    if new_rep_tag in images_names:
+                        error_popup = Make_popup("ERROR")
+                        error_popup.error("ERROR! image name already exists")
+                        self.popup.grab_set()
+                    else:
+                        # -------- edit rep:tag --------- #
+                        save = Docker_container().save_container(self.cont_id, new_rep_tag)
+                        if save[0] != 0:
+                            self.error_popup = Make_popup("ERROR")
+                            self.error_popup.error(save[1])
+                            self.popup.grab_set()
+                        else:
                             self.popup.destroy()
 
     # ---------------- remove ---------------------- #
@@ -553,7 +626,7 @@ class Make_popup():
         # -------- remove command ------- #
         def rm_button_function():
             rm = Docker_container().remove_container(self.cont_id)
-            if rm[0] == 1:
+            if rm[0] != 0:
                 self.error_popup = Make_popup("ERROR")
                 self.error_popup.error(rm[1])
                 self.popup.grab_set()
@@ -561,7 +634,6 @@ class Make_popup():
                 print(f"removed image {self.cont_name}")
                 self.reload_page()
                 self.popup.destroy()
-
 
 class Remove_vols_and_ports():
 # ---------------- create vols and ports objects --------------------------------- #

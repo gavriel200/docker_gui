@@ -216,9 +216,9 @@ class Docker_container:
                 print(terminal_command)
                 os.system(f"gnome-terminal -e 'bash -c \"{terminal_command}; sleep 1000000\" '") # ----- ubuntu
                 # os.system("start cmd /c " + cmd_command) ------ windows
-                return "opening bash"
+                return 0, "opening bash"
             else:
-                return "container " + container_id + " is not running"
+                return 1, "container " + container_id + " is not running"
         
     @staticmethod
     def remove_container(container_id):

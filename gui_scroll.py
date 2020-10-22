@@ -83,7 +83,7 @@ class Make_scrollbar():
             self.img_save_button.save_image(rows[0]+":"+rows[1], self.reload_image_page)
             self.img_save_button.grid(7, row)
             self.img_rm_button = Make_image_button(self.frame, "./images/rm_button.png")
-            self.img_rm_button.rm_image(rows[0]+":"+rows[1], self.reload_image_page)
+            self.img_rm_button.rm_image(rows[0]+":"+rows[1], self.reload_image_page, rows[2])
             self.img_rm_button.grid(8, row)
             row = row + 1
 
@@ -113,7 +113,10 @@ class Make_scrollbar():
             if len(rows[1]) > 21:
                 Label(self.frame, text=rows[1], bg="#0e1733", font=("Courier",6), fg="white").grid(row=row, column=2)
             else:
-                Label(self.frame, text=rows[1], bg="#0e1733", font=("Courier",8), fg="white").grid(row=row, column=2)
+                if ":" in rows[1]:
+                    Label(self.frame, text=rows[1], bg="#0e1733", font=("Courier",8), fg="white").grid(row=row, column=2)
+                else:
+                    Label(self.frame, text="removed image", bg="#0e1733", font=("Courier",7), fg="white").grid(row=row, column=2)
             
             # -------- adding the buttons --- #
             if rows[0] in running_containers:
@@ -121,14 +124,14 @@ class Make_scrollbar():
                 self.cont_start_stop_button.start_stop_container(rows[0], self.reload_container_page)
                 self.cont_start_stop_button.grid(3, row)
                 self.cont_bash_button = Make_image_button(self.frame, "./images/bash_button_on_cont.png")
-                self.cont_bash_button.bash_on_container(rows[0], self.reload_container_page)
+                self.cont_bash_button.bash_on_container(rows[0])
                 self.cont_bash_button.grid(4, row)
             else:
                 self.cont_start_stop_button = Make_image_button(self.frame, "./images/start_button_cont.png")
                 self.cont_start_stop_button.start_stop_container(rows[0], self.reload_container_page)
                 self.cont_start_stop_button.grid(3, row)
                 self.cont_bash_button = Make_image_button(self.frame, "./images/bash_button_off_cont.png")
-                self.cont_bash_button.bash_off_container(rows[0], self.reload_container_page)
+                self.cont_bash_button.bash_off_container()
                 self.cont_bash_button.grid(4, row)
             self.cont_save_button = Make_image_button(self.frame, "./images/save_button.png")
             self.cont_save_button.save_container(rows[0], self.reload_container_page, rows[-1])

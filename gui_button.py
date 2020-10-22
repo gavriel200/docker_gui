@@ -70,8 +70,12 @@ class Make_image_button():
         self.button.configure(command=self.run_image_function)
 
     def run_image_function(self):
-        self.pop_up = Make_popup("RUN IMAGE")
-        self.pop_up.run_image_popup(self.rep_tag, self.reload_image_page)
+        if self.rep_tag == "<none>:<none>":
+            error_popup = Make_popup("ERROR")
+            error_popup.error("ERROR! can't handel none image please remove or use the terminal") 
+        else:
+            self.pop_up = Make_popup("RUN IMAGE")
+            self.pop_up.run_image_popup(self.rep_tag, self.reload_image_page)
 
     # ---------------- edit ------------------ #
     def edit_image(self, rep_tag, reload_image_page):
@@ -80,8 +84,12 @@ class Make_image_button():
         self.button.configure(command=self.edit_image_function)
 
     def edit_image_function(self):
-        self.pop_up = Make_popup("EDIT IMAGE NAME")
-        self.pop_up.edit_image_popup(self.rep_tag, self.reload_image_page)
+        if self.rep_tag == "<none>:<none>":
+            error_popup = Make_popup("ERROR")
+            error_popup.error("ERROR! can't handel none image please remove or use the terminal") 
+        else:
+            self.pop_up = Make_popup("EDIT IMAGE NAME")
+            self.pop_up.edit_image_popup(self.rep_tag, self.reload_image_page)
 
     # ---------------- save ------------------------ #
     def save_image(self, rep_tag, reload_image_page):
@@ -90,18 +98,27 @@ class Make_image_button():
         self.button.configure(command=self.save_image_function)
 
     def save_image_function(self):
-        self.pop_up = Make_popup("SAVE IMAGE TO FILE")
-        self.pop_up.save_image_popup(self.rep_tag, self.reload_image_page)
+        if self.rep_tag == "<none>:<none>":
+            error_popup = Make_popup("ERROR")
+            error_popup.error("ERROR! can't handel none image please remove or use the terminal") 
+        else:
+            self.pop_up = Make_popup("SAVE IMAGE TO FILE")
+            self.pop_up.save_image_popup(self.rep_tag, self.reload_image_page)
 
     # ---------------- remove ---------------------- #
-    def rm_image(self, rep_tag, reload_image_page):
+    def rm_image(self, rep_tag, reload_image_page, id):
         self.reload_image_page = reload_image_page
         self.rep_tag = rep_tag
+        self.id = id
         self.button.configure(command=self.rm_image_function)
 
     def rm_image_function(self):
-        self.pop_up = Make_popup("REMOVE IMAGE")
-        self.pop_up.rm_image_popup(self.rep_tag, self.reload_image_page)
+        if self.rep_tag == "<none>:<none>":
+            self.pop_up = Make_popup("REMOVE IMAGE")
+            self.pop_up.rm_image_popup(self.id, self.reload_image_page)
+        else:
+            self.pop_up = Make_popup("REMOVE IMAGE")
+            self.pop_up.rm_image_popup(self.rep_tag, self.reload_image_page)
 
 # ---------------- container page buttons ---------------------------------------- #
     # ---------------- start stop ------------------ #
@@ -112,7 +129,7 @@ class Make_image_button():
 
     def start_stop_container_function(self):
         start_stop = Docker_container().start_or_stop_containers(self.cont_id)
-        if start_stop[0]==1:
+        if start_stop[0] != 0:
                 error_popup = Make_popup("ERROR")
                 error_popup.error(start_stop[1]) 
         else:
@@ -120,23 +137,19 @@ class Make_image_button():
             self.reload_container_page()
 
     # ---------------- bash ------------------------ #
-    def bash_on_container(self, cont_id, reload_container_page):
-        self.reload_container_page = reload_container_page
+    def bash_on_container(self, cont_id):
         self.cont_id = cont_id
         self.button.configure(command=self.bash_on_container_function, state=NORMAL)
 
     def bash_on_container_function(self):
         start_bash = Docker_container().start_container_in_bash(self.cont_id)
-        if start_bash[0]==1:
+        if start_bash[0] != 0:
                 error_popup = Make_popup("ERROR")
                 error_popup.error(start_bash[1]) 
         else:
             print(f"started container with id {self.cont_id} in bash")
-            self.reload_container_page()
 
-    def bash_off_container(self, cont_id, reload_container_page):
-        self.reload_container_page = reload_container_page
-        self.cont_id = cont_id
+    def bash_off_container(self):
         self.button.configure(command=self.bash_off_container_function, state=DISABLED)
 
     def bash_off_container_function(self):
