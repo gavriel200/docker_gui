@@ -13,7 +13,7 @@ and more.
 
 ## shark for ubuntu
  
-![Alt text](https://github.com/gavriel200/docker_gui/blob/master/images/ubuntu_shark.png)
+![Alt text](https://github.com/gavriel200/docker_gui/blob/master/Ubuntu/images/ubuntu_shark.png)
 
 The first shark version was build on ubuntu so it supports only ubuntu. (there wiil be a windows version later).
 This palication was made using python's Tkinter not the ideal way to create an aplication but it works.
