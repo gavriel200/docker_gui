@@ -17,7 +17,7 @@ class MainApplication():
         self.top_frame = Frame(self.app, width=500, height=100, bg="#0e1733") # not visible used to place the menu button on the top
         self.top_frame.place(x=0,y=0)
 
-        self.startup_frame = Frame(self.app, width=500, height=450, bg="red") # visible when opened
+        self.startup_frame = Frame(self.app, width=500, height=450, bg="#0e1733") # visible when opened
         self.startup_frame.place(x=0,y=100)
 
         # ---------------- create menu buttons --------- #
@@ -27,6 +27,7 @@ class MainApplication():
         self.menu_containers.menu_button_containers()
         self.menu_home = Make_menubutton(self.top_frame, self.app, self.startup_frame)
         self.menu_home.menu_button_home()
+        self.menu_home.invoke()
 
         # ---------------- mainloop -------------------- #
         self.app.mainloop()

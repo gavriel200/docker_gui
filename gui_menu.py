@@ -1,3 +1,4 @@
+import webbrowser
 from tkinter import *
 
 from docker_command import Docker_images
@@ -77,8 +78,46 @@ class Make_menubutton():
         except:
             pass
         self.add_main_frame(self.top_frame)
-        l1 = Make_label(main_frame, "home", 16, "#ffffff", "#203165")
-        l1.place(200,200)
+        f1 = Frame(main_frame, width=440, height=400, bg = "#00080f")
+        f1.place(x = 30, y = 130)
+        l1 = Make_label(f1, "hello and welcome to SHARK", 17, "white", "#00080f")
+        l1.place(35,20)
+        l2 = Make_label(f1, "so what is shark?", 12, "white", "#00080f")
+        l2.place(30,55)
+        l3 = Make_label(f1, "shark is a docker gui designed to help", 13, "white", "#00080f")
+        l3.place(30,75)
+        l4 = Make_label(f1, "with basic functions that the docker", 13, "white", "#00080f")
+        l4.place(30,95)
+        l5 = Make_label(f1, "user uses often.", 13, "white", "#00080f")
+        l5.place(30,115)
+        l6 = Make_label(f1, "this platfor was build in python so its not ideal", 9, "white", "#00080f")
+        l6.place(30,150)
+        l7 = Make_label(f1, "for a gui.", 9, "white", "#00080f")
+        l7.place(30,165)
+        l8 = Make_label(f1, "you should watch when you name your images", 9, "white", "#00080f")
+        l8.place(30,180)
+        l9 = Make_label(f1, "or your containers, some times if the name is", 9, "white", "#00080f")
+        l9.place(30,195)
+        l10 = Make_label(f1, "too long it will move the buttons and you wont", 9, "white", "#00080f")
+        l10.place(30,210)
+        l11 = Make_label(f1, "be able to use shark proparly.", 9, "white", "#00080f")
+        l11.place(30,225)
+        l12 = Make_label(f1, "same goes for when you add ports and vols in image run.", 9, "white", "#00080f")
+        l12.place(30,240)
+        l13 = Make_label(f1, "i'd be happy for your support (:", 13, "white", "#00080f")
+        l13.place(30,320)
+        
+
+        def callback(url):
+            webbrowser.open_new(url)
+
+        link1 = Label(f1, text="github link", fg="#707ec7", cursor="hand2", bg="#00080f", font=("Courier",13), borderwidth=0)
+        link1.place(x=30, y=350)
+        link1.bind("<Button-1>", lambda e: callback("https://github.com/gavriel200/docker_gui"))
+    
+    def invoke(self):
+        # -------- press button --------- #
+        self.button.invoke()
 
 # ---------------- other functions ----------------------------------------------- #
     # ---------------- frame related --------------- #
