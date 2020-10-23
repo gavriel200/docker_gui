@@ -9,7 +9,7 @@ through the Shark docker gui
   
 ## shark for ubuntu
  
-![Alt text](https://www.linkpicture.com/q/ubuntu_shark.png)
+![Alt text](https://github.com/gavriel200/docker_gui/blob/master/images/ubuntu_shark.png)
 
 For the ubuntu user who wants easy work with docker here is the solusion, but before you start you'll need some things.
 First you will need python. this project has been tested only on python 3.8.5 yet.
