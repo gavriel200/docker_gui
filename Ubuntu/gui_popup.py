@@ -5,8 +5,6 @@ from tkinter import filedialog
 from docker_command import Docker_container, Docker_images
 from gui_label import Make_label
 
-# -------------------------------------------------------------------------------- #
-# ----------------
 
 class Make_popup():
 # ---------------- create __init__ popup ----------------------------------------- #
