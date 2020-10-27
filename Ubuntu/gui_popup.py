@@ -326,7 +326,7 @@ class Make_popup():
                 error_popup.error("ERROR! make sure you write a reposotry name")
                 self.popup.grab_set()
             # -------- check rep len -------- #
-            if len(new_rep) > 13:
+            elif len(new_rep) > 13:
                 error_popup = Make_popup("ERROR")
                 error_popup.error("ERROR! you should not make names so long")
                 self.popup.grab_set()
@@ -540,7 +540,7 @@ class Make_popup():
                 error_popup.error("ERROR! make sure you write a reposotry name")
                 self.popup.grab_set()
             # -------- check rep len -------- #
-            if len(new_rep) > 13:
+            elif len(new_rep) > 13:
                 error_popup = Make_popup("ERROR")
                 error_popup.error("ERROR! you should not make names so long")
                 self.popup.grab_set()
