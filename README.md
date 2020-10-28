@@ -34,23 +34,19 @@ You will also need the Tkinter library for python:
 $ sudo apt-get install python-tk
 ```
 
-> Watch out!
-> Before you use the apt or apt-get install commands you should do the 
-> ```bash
+> Watch out! before you use the apt install  or apt-get install commands you should do the 
+    
     $ sudo apt update
-    ```
-> ```bash
+
     $ sudo apt-get update
-    ```
-``` 
+
 Watch out!
-    Before you use the apt or apt-get install commands you should do the 
-    ```bash
+    Before you use the apt install or apt-get install commands you should do the 
+
         $ sudo apt update
-    ```
-    ```bash
+
         $ sudo apt-get update
-    ```
+
 ```
 ## docker
 
