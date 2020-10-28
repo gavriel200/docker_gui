@@ -13,7 +13,7 @@ For example:
 * open containers in bash
 and more.
 
-![Alt text](https://github.com/gavriel200/docker_gui/blob/master/Code/images/shark.png)
+![Alt text](https://github.com/gavriel200/docker_gui/blob/master/Code/images/ubuntu_shark.png)
 
 # Code
 
