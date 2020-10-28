@@ -36,9 +36,9 @@ $ sudo apt-get install python-tk
 
 > Watch out! before you use the apt install  or apt-get install commands you should do the 
     
-> $ sudo apt update
-
-> $ sudo apt-get update  
+    $ sudo apt update
+  
+    $ sudo apt-get update  
 
 ## docker
 
